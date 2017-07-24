@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WodfPlayer is wild and free</title>
+  <script type="text/javascript" charset="utf-8" defer src="/latest/wolfplayer.js" onload="initPlayer();"></script>
+</head>
+<body>
+  <div id="parentVideo"></div>
+  <script type="text/javascript">
+    function initPlayer() {
+      window.player = new WolfPlayer({
+        parent: '#parentVideo',
+        src: 'teste'
+      })
+    }
+  </script>
+</body>
+</html>
