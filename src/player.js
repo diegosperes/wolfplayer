@@ -1,7 +1,7 @@
 export default class Player {
   constructor(options) {
     this.options = options
-    this._generateVideo()
+    this._createPlayback()
     this._attachTo()
   }
 
@@ -15,7 +15,7 @@ export default class Player {
     parent.appendChild(this._videoElement)
   }
 
-  _generateVideo() {
+  _createPlayback() {
     this._videoElement = document.createElement('video')
     this._videoElement.setAttribute('src', this.options.src)
   }
