@@ -4,10 +4,10 @@ import WolfPlayer from '../src/player'
 
 describe('Player', () => {
   afterEach(() => {
-    for (let video of document.querySelectorAll('video')) { video.parentNode.removeChild(video) }
+    for (let video of document.querySelectorAll('video')) { video.parentElement.removeChild(video) }
   })
 
-  describe('insert video element in DOM when parent is a string', () => {
+  describe('insert video element in DOM when parent', () => {
     it('is a string', () => {
       new WolfPlayer({ parent: 'body', src: 'teste' })
       let videoElement = document.querySelector('body video')
