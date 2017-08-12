@@ -1,6 +1,6 @@
 module.exports = {
   context: __dirname + "/src",
-  entry: "./player.js",
+  entry: ['babel-polyfill', "./player.js"],
   module: {
     rules: [
       {
