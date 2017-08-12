@@ -1,6 +1,6 @@
 module.exports = {
-  context: __dirname + "/wolfplayer",
-  entry: "./index.js",
+  context: __dirname + "/src",
+  entry: "./player.js",
   module: {
     rules: [
       {
