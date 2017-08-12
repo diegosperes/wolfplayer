@@ -1,5 +1,4 @@
-import { expect } from 'chai'
-
+import Events from '../src/events'
 import WolfPlayer from '../src/player'
 
 describe('Player', () => {
@@ -8,25 +7,34 @@ describe('Player', () => {
   })
 
   describe('insert video element in DOM when parent', () => {
-    it('is a string', () => {
-      new WolfPlayer({ parent: 'body', src: 'teste' })
-      let videoElement = document.querySelector('body video')
+    it('is a string', (done) => {
+      let player = new WolfPlayer({ parent: 'body', src: 'teste' })
 
-      expect(videoElement.tagName).to.be.equal('VIDEO')
+      player.addListener(Events.HOOK_READY, () => {
+        let videoElement = document.querySelector('body video')
+        expect(videoElement.tagName).to.be.equal('VIDEO')
+        done()
+      })
     })
 
-    it('is a DOM element', () => {
-      new WolfPlayer({ parent: document.body, src: 'teste' })
-      let videoElement = document.querySelector('body video')
-
-      expect(videoElement.tagName).to.be.equal('VIDEO')
+    it('is a DOM element', (done) => {
+      let player =  new WolfPlayer({ parent: document.body, src: 'teste' })
+      
+      player.addListener(Events.HOOK_READY, () => {
+        let videoElement = document.querySelector('body video')
+        expect(videoElement.tagName).to.be.equal('VIDEO')
+        done()
+      })
     })
   })
 
-  it('insert video with correct source', () => {
-    new WolfPlayer({ parent: document.body, src: 'teste' })
-    let videoElement = document.querySelector('body video')
+  it('insert video with correct source', (done) => {
+    let player = new WolfPlayer({ parent: document.body, src: 'teste' })
 
-    expect(videoElement.src).to.match(/http:\/\/localhost:[0-9]{4}\/teste/)
+    player.addListener(Events.HOOK_READY, () => {
+      let videoElement = document.querySelector('body video')
+      expect(videoElement.src).to.match(/http:\/\/localhost:[0-9]{4}\/teste/)
+      done()
+    })
   })
 })
