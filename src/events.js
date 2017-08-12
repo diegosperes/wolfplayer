@@ -1,3 +1,7 @@
-const HOOK_START = 'hook:start'
-const HOOK_PLUGIN = 'hook:plugin'
-const HOOK_FINISH = 'hook:ready'
+export default class Events {
+
+  static get HOOK_START() { return 'hook:start' }
+  static get HOOK_PLUGIN() { return 'hook:plugin' }
+  static get HOOK_READY() { return 'hook:ready' }
+
+}

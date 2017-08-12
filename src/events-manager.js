@@ -16,10 +16,10 @@ export default class EventsManager {
   // TO-DO: call exception when event does not exist
   // TO-DO: treat erro from callback
   trigger(event, args) {
-    if (!event in this._events) return
+    if (!event || !(event in this._events)) return new Promise(resolve => { resolve() })
 
     return new Promise(resolve => {
-      let counter = 1
+      let counter = 0
       let expectedCounter = this._events[event].length
 
       for(let listerner of this._events[event]) {

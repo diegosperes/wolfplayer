@@ -23,12 +23,27 @@ describe('Events Manager', () => {
   it('add listener and call calback', (done) => {
     let callback = sinon.spy()
     eventsManager.addListener('some-event', callback)
-    eventsManager.trigger('some-event', [1, 2, 3])
-
-    setTimeout(() => {
+    eventsManager.trigger('some-event', [1, 2, 3]).then(() => {
       callback.should.have.been.calledWithExactly(1, 2, 3)
       done()
-    }, 1)
+    })
+  })
+
+  it('does not call calback when event is undefined', (done) => {
+    let callback = sinon.spy()
+    eventsManager.addListener('some-event', callback)
+    eventsManager.trigger(undefined).then(() => {
+      callback.should.not.have.been.called
+      done()
+    })
+  })
+
+  it('does not call calback when event does not exist', (done) => {
+    let callback = sinon.spy()
+    eventsManager.trigger('some-event').then(() => {
+      callback.should.not.have.been.called
+      done()
+    })
   })
 
   it('call async callback', (done) => {
