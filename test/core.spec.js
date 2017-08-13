@@ -11,14 +11,15 @@ describe('Core', () => {
   describe('when player ready', () => {
 
     let player
+    let callback
 
     beforeEach((done) => {
       player = new WolfPlayer(utils.baseOptions)
+      callback = sinon.spy()
       player.addListener(Events.HOOK_READY, () => done())
     })
 
     it('should trigger play event', (done) => {
-      let callback = sinon.spy()
       player.addListener(Events.PLAYBACK_PLAY, callback)
       player.addListener(Events.PLAYBACK_PLAY, () => {
         callback.should.have.been.called
@@ -29,27 +30,23 @@ describe('Core', () => {
     })
 
     it('should trigger pause event', (done) => {
-      let callback = sinon.spy()
       player.addListener(Events.PLAYBACK_PAUSE, callback)
       player.addListener(Events.PLAYBACK_PAUSE, () => {
         callback.should.have.been.called
         done()
       })
 
-      player.trigger(Events.API_PLAY)
-      player.trigger(Events.API_PAUSE)
+      player.trigger(Events.API_PLAY).then(() => player.trigger(Events.API_PAUSE))
     })
 
     it('should trigger seek event', (done) => {
-      let callback = sinon.spy()
       player.addListener(Events.PLAYBACK_SEEKING, callback)
       player.addListener(Events.PLAYBACK_SEEKED, () => {
         callback.should.have.been.called
         done()
       })
 
-      player.trigger(Events.API_PLAY)
-      player.trigger(Events.API_SEEK, [2])
+      player.trigger(Events.API_PLAY).then(() => player.trigger(Events.API_SEEK, [2]))
     })
   })
 

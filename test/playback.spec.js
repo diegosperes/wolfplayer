@@ -9,6 +9,52 @@ describe('Playback', () => {
     for (let video of document.querySelectorAll('video')) { video.parentElement.removeChild(video) }
   })
 
+  describe('when player ready', (done) => {
+
+    let player
+    let videoElement
+    let callback
+
+    beforeEach((done) => {
+      player = new WolfPlayer(utils.baseOptions)
+      callback = sinon.spy()
+      player.addListener(Events.HOOK_READY, () => { 
+        videoElement = document.querySelector('body video')
+        done()
+      })
+    })
+
+    it('should trigger play event', (done) => {
+      player.addListener(Events.PLAYBACK_PLAY, callback)
+      player.addListener(Events.PLAYBACK_PLAY, () => {
+        callback.should.have.been.called
+        done()
+      })
+
+      videoElement.play()
+    })
+
+    it('should trigger pause event', (done) => {
+      player.addListener(Events.PLAYBACK_PAUSE, callback)
+      player.addListener(Events.PLAYBACK_PAUSE, () => {
+        callback.should.have.been.called
+        done()
+      })
+
+      videoElement.play().then(() => videoElement.pause())
+    })
+
+    it('should trigger seek event', (done) => {
+      player.addListener(Events.PLAYBACK_SEEKING, callback)
+      player.addListener(Events.PLAYBACK_SEEKED, () => {
+        callback.should.have.been.called
+        done()
+      })
+
+      videoElement.play().then(() => videoElement.currentTime = 2)
+    })
+  })
+
   it('insert video with correct source', (done) => {
     let player = new WolfPlayer(utils.baseOptions)
 
