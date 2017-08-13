@@ -6,11 +6,13 @@ export default class Core {
   constructor(eventsManager, options) {
     this.options = options
     this.eventsManager = eventsManager
-    this.bindHooks()
+    this.bind()
   }
 
-  bindHooks() {
+  bind() {
     this.eventsManager.addListener(Events.HOOK_START, this.onHookStart, this)
+    this.eventsManager.addListener(Events.API_PLAY, this.onPlay, this)
+    this.eventsManager.addListener(Events.API_PAUSE, this.onPause, this)
   }
 
   onHookStart() {
@@ -18,8 +20,11 @@ export default class Core {
     this.attachTo()
   }
 
+  onPlay() { this.playback.play() }
+  onPause() { this.playback.pause() }
+
   playbackSetup() {
-    this.playback = new HTML5Video(this.options.src)
+    this.playback = new HTML5Video(this.options.src, this.eventsManager)
     this.playback.setup(this.options.playback)
   }
 

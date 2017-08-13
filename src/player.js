@@ -6,13 +6,13 @@ export default class Player {
   constructor(options) {
     this.eventsManager = new EventsManager()
     this.core = new Core(this.eventsManager, options)
-    this.bindHooks()
+    this.bind()
     this.startPlayer()
 
     return this.eventsManager
   }
 
-  bindHooks() {
+  bind() {
     this.eventsManager.addListener(Events.HOOK_PLUGIN, this.onHookPlugin, this)
   }
 

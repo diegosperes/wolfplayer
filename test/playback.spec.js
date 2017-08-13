@@ -1,10 +1,7 @@
+import utils from './utils'
+
 import Events from '../src/events'
 import WolfPlayer from '../src/player'
-
-let baseOptions = {
-    parent: 'body',
-    src: 'teste'
-}
 
 describe('Playback', () => {
 
@@ -13,11 +10,11 @@ describe('Playback', () => {
   })
 
   it('insert video with correct source', (done) => {
-    let player = new WolfPlayer(baseOptions)
+    let player = new WolfPlayer(utils.baseOptions)
 
     player.addListener(Events.HOOK_READY, () => {
       let videoElement = document.querySelector('body video')
-      expect(videoElement.src).to.match(/http:\/\/localhost:[0-9]{4}\/teste/)
+      expect(videoElement.src).to.match(/http:\/\/localhost:[0-9]{4}\/base\/public\/sample\.mp4/)
       done()
     })
   })
@@ -27,7 +24,7 @@ describe('Playback', () => {
     describe('add attribute', () => {
 
       it('by default', (done) => {
-        new WolfPlayer(baseOptions).addListener(Events.HOOK_READY, () => {
+        new WolfPlayer(utils.baseOptions).addListener(Events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
           expect(videoElement.getAttribute('preload')).to.be.equal('metadata')
           done()
@@ -35,7 +32,7 @@ describe('Playback', () => {
       })
 
       it('when preload has a value', (done) => {
-        let options = Object.assign({playback: {preload: 'none'}}, baseOptions)
+        let options = Object.assign({playback: {preload: 'none'}}, utils.baseOptions)
 
         new WolfPlayer(options).addListener(Events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
@@ -45,7 +42,7 @@ describe('Playback', () => {
       })
 
       it('when preload is undefined', (done) => {
-        let options = Object.assign({playback: {}}, baseOptions)
+        let options = Object.assign({playback: {}}, utils.baseOptions)
 
         new WolfPlayer(options).addListener(Events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
@@ -59,7 +56,7 @@ describe('Playback', () => {
   describe('autoplay', () => {
 
     it('add attribute when autoplay is true', (done) => {
-      let options = Object.assign({playback: {autoplay: true}}, baseOptions)
+      let options = Object.assign({playback: {autoplay: true}}, utils.baseOptions)
 
       new WolfPlayer(options).addListener(Events.HOOK_READY, () => {
         let videoElement = document.querySelector('body video')
@@ -71,7 +68,7 @@ describe('Playback', () => {
     describe('does not add attribute', () => {
 
       it('by default', (done) => {
-        new WolfPlayer(baseOptions).addListener(Events.HOOK_READY, () => {
+        new WolfPlayer(utils.baseOptions).addListener(Events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
           expect(videoElement.hasAttribute('autoplay')).to.be.false
           done()
@@ -79,7 +76,7 @@ describe('Playback', () => {
       })
 
       it('when autoplay is false', (done) => {
-        let options = Object.assign({playback: {autoplay: false}}, baseOptions)
+        let options = Object.assign({playback: {autoplay: false}}, utils.baseOptions)
 
         new WolfPlayer(options).addListener(Events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
@@ -89,7 +86,7 @@ describe('Playback', () => {
       })
 
       it('when autoplay is undefined', (done) => {
-        let options = Object.assign({playback: {}}, baseOptions)
+        let options = Object.assign({playback: {}}, utils.baseOptions)
 
         new WolfPlayer(options).addListener(Events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
@@ -103,7 +100,7 @@ describe('Playback', () => {
   describe('loop', () => {
 
     it('add attribute when loop is true', (done) => {
-      let options = Object.assign({playback: {loop: true}}, baseOptions)
+      let options = Object.assign({playback: {loop: true}}, utils.baseOptions)
 
       new WolfPlayer(options).addListener(Events.HOOK_READY, () => {
         let videoElement = document.querySelector('body video')
@@ -115,7 +112,7 @@ describe('Playback', () => {
     describe('does not add attribute', () => {
 
       it('by default', (done) => {
-        new WolfPlayer(baseOptions).addListener(Events.HOOK_READY, () => {
+        new WolfPlayer(utils.baseOptions).addListener(Events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
           expect(videoElement.hasAttribute('loop')).to.be.false
           done()
@@ -123,7 +120,7 @@ describe('Playback', () => {
       })
 
       it('when loop is false', (done) => {
-        let options = Object.assign({playback: {loop: false}}, baseOptions)
+        let options = Object.assign({playback: {loop: false}}, utils.baseOptions)
 
         new WolfPlayer(options).addListener(Events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
@@ -133,7 +130,7 @@ describe('Playback', () => {
       })
 
       it('when loop is undefined', (done) => {
-        let options = Object.assign({playback: {}}, baseOptions)
+        let options = Object.assign({playback: {}}, utils.baseOptions)
 
         new WolfPlayer(options).addListener(Events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
@@ -149,7 +146,7 @@ describe('Playback', () => {
     describe('add attribute', () => {
 
       it('by default', (done) => {
-        new WolfPlayer(baseOptions).addListener(Events.HOOK_READY, () => {
+        new WolfPlayer(utils.baseOptions).addListener(Events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
           expect(videoElement.hasAttribute('controls')).to.be.true
           done()
@@ -157,7 +154,7 @@ describe('Playback', () => {
       })
 
       it('when controls is true', (done) => {
-        let options = Object.assign({playback: {controls: true}}, baseOptions)
+        let options = Object.assign({playback: {controls: true}}, utils.baseOptions)
 
         new WolfPlayer(options).addListener(Events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
@@ -167,7 +164,7 @@ describe('Playback', () => {
       })
 
       it('when controls is undefined', (done) => {
-        let options = Object.assign({playback: {}}, baseOptions)
+        let options = Object.assign({playback: {}}, utils.baseOptions)
 
         new WolfPlayer(options).addListener(Events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
@@ -178,7 +175,7 @@ describe('Playback', () => {
     })
 
     it('does not add attribute when controls is false', (done) => {
-      let options = Object.assign({playback: {controls: false}}, baseOptions)
+      let options = Object.assign({playback: {controls: false}}, utils.baseOptions)
 
       new WolfPlayer(options).addListener(Events.HOOK_READY, () => {
         let videoElement = document.querySelector('body video')
