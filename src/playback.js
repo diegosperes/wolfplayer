@@ -21,8 +21,8 @@ export default class HTML5Playback {
   onSeeking(event) { this.eventsManager.trigger(Events.PLAYBACK_SEEKING, [event]) }
   onSeeked(event) { this.eventsManager.trigger(Events.PLAYBACK_SEEKED, [event]) }
 
-  play() { this.mediaElement.play() }
-  pause() { this.mediaElement.pause() }
+  play() { return this.mediaElement.play() }
+  pause() { return this.mediaElement.pause() }
   seek(seconds) { this.mediaElement.currentTime = seconds }
 
   setup(options) {
