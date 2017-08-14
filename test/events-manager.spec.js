@@ -92,4 +92,28 @@ describe('Events Manager', () => {
       done()
     })
   })
+
+  it('should treat exception from callback', (done) => {
+    let callback1 = () => { throw 'some-error' }
+    let callback2 = sinon.spy()
+
+    eventsManager.addListener('some-event', callback1)
+    eventsManager.addListener('some-event', callback2)
+    eventsManager.trigger('some-event').then(() => {
+      callback2.should.have.been.called
+      done()
+    })
+  })
+
+  it('should treat reject from promise callback', (done) => {
+    let callback1 = () => { return new Promise((resolve, reject) => reject()) }
+    let callback2 = sinon.spy()
+
+    eventsManager.addListener('some-event', callback1)
+    eventsManager.addListener('some-event', callback2)
+    eventsManager.trigger('some-event').then(() => {
+      callback2.should.have.been.called
+      done()
+    })
+  })
 })
