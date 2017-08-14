@@ -49,6 +49,16 @@ describe('Core', () => {
       player.trigger(Events.API_PLAY).then(() => player.trigger(Events.API_RATECHANGE, [2]))
     })
 
+    it('should trigger volumechange event', (done) => {
+      player.addListener(Events.PLAYBACK_VOLUMECHANGE, callback)
+      player.addListener(Events.PLAYBACK_VOLUMECHANGE, () => {
+        callback.should.have.been.called
+        done()
+      })
+
+      player.trigger(Events.API_PLAY).then(() => player.trigger(Events.API_VOLUMECHANGE, [0.8]))
+    })
+
     it('should trigger seek event', (done) => {
       player.addListener(Events.PLAYBACK_SEEKING, callback)
       player.addListener(Events.PLAYBACK_SEEKED, () => {

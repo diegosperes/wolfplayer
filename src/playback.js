@@ -18,6 +18,7 @@ export default class HTML5Playback extends BaseObject {
     this.mediaElement.addEventListener('timeupdate', (event) => this.onTimeupdate(event))
     this.mediaElement.addEventListener('progress', (event) => this.onProgress(event))
     this.mediaElement.addEventListener('ratechange', (event) => this.onRatechange(event))
+    this.mediaElement.addEventListener('volumechange', (event) => this.onVolumechange(event))
   }
 
   onPlay(event) { this.manager.trigger(Events.PLAYBACK_PLAY, [event]) }
@@ -27,11 +28,13 @@ export default class HTML5Playback extends BaseObject {
   onTimeupdate(event) { this.manager.trigger(Events.PLAYBACK_TIMEUPDATE, [event]) }
   onProgress(event) { this.manager.trigger(Events.PLAYBACK_PROGRESS, [event]) }
   onRatechange(event) { this.manager.trigger(Events.PLAYBACK_RATECHANGE, [event]) }
+  onVolumechange(event) { this.manager.trigger(Events.PLAYBACK_VOLUMECHANGE, [event]) }
 
   play() { return this.mediaElement.play() }
   pause() { return this.mediaElement.pause() }
   seek(seconds) { this.mediaElement.currentTime = seconds }
   changeRate(rate) { this.mediaElement.playbackRate = rate }
+  changeVolume(volume) { this.mediaElement.volume = volume }
 
   setup(options) {
     this.mediaElement.setAttribute('src', this.source)

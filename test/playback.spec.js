@@ -74,6 +74,16 @@ describe('Playback', () => {
       videoElement.play().then(() => videoElement.playbackRate = 2)
     })
 
+    it('should trigger volumechange event', (done) => {
+      player.addListener(Events.PLAYBACK_VOLUMECHANGE, callback)
+      player.addListener(Events.PLAYBACK_VOLUMECHANGE, () => {
+        callback.should.have.been.called
+        done()
+      })
+
+      videoElement.play().then(() => videoElement.volume = 0.8)
+    })
+
     it('should trigger seek event', (done) => {
       player.addListener(Events.PLAYBACK_SEEKING, callback)
       player.addListener(Events.PLAYBACK_SEEKED, () => {

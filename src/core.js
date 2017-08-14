@@ -15,6 +15,7 @@ export default class Core extends BaseObject {
     this.manager.addListener(Events.API_PAUSE, this.onPause, this)
     this.manager.addListener(Events.API_SEEK, this.onSeek, this)
     this.manager.addListener(Events.API_RATECHANGE, this.onRatechange, this)
+    this.manager.addListener(Events.API_VOLUMECHANGE, this.onVolumechange, this)
   }
 
   onHookStart() {
@@ -26,6 +27,7 @@ export default class Core extends BaseObject {
   onPause() { return this.playback.pause() }
   onSeek(seconds) { this.playback.seek(seconds) }
   onRatechange(rate) { this.playback.changeRate(rate) }
+  onVolumechange(volume) { this.playback.changeVolume(volume) }
 
   playbackSetup() {
     this.playback = new HTML5Video(this.options.src, this.manager)
