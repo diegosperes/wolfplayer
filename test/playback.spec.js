@@ -9,7 +9,7 @@ describe('Playback', () => {
     for (let video of document.querySelectorAll('video')) { video.parentElement.removeChild(video) }
   })
 
-  describe('when player ready', (done) => {
+  describe('when player ready', () => {
 
     let player
     let videoElement
