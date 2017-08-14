@@ -1,25 +1,26 @@
+import BaseObject from './base.js'
 import Events from './events'
 
-export default class HTML5Playback {
+export default class HTML5Playback extends BaseObject {
 
-  constructor(source, eventsManager) {
+  constructor(source, manager) {
+    super(manager)
     this.source = source
-    this.eventsManager = eventsManager
-    this.mediaElement = document.createElement('video')
-    this.bind()
   }
 
   bind() {
+    this.mediaElement = document.createElement('video')
+
     this.mediaElement.addEventListener('play', (event) => this.onPlay(event))
     this.mediaElement.addEventListener('pause', (event) => this.onPause(event))
     this.mediaElement.addEventListener('seeking', (event) => this.onSeeking(event))
     this.mediaElement.addEventListener('seeked', (event) => this.onSeeked(event))
   }
 
-  onPlay(event) { this.eventsManager.trigger(Events.PLAYBACK_PLAY, [event]) }
-  onPause(event) { this.eventsManager.trigger(Events.PLAYBACK_PAUSE, [event]) }
-  onSeeking(event) { this.eventsManager.trigger(Events.PLAYBACK_SEEKING, [event]) }
-  onSeeked(event) { this.eventsManager.trigger(Events.PLAYBACK_SEEKED, [event]) }
+  onPlay(event) { this.manager.trigger(Events.PLAYBACK_PLAY, [event]) }
+  onPause(event) { this.manager.trigger(Events.PLAYBACK_PAUSE, [event]) }
+  onSeeking(event) { this.manager.trigger(Events.PLAYBACK_SEEKING, [event]) }
+  onSeeked(event) { this.manager.trigger(Events.PLAYBACK_SEEKED, [event]) }
 
   play() { return this.mediaElement.play() }
   pause() { return this.mediaElement.pause() }

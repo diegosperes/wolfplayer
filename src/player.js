@@ -1,29 +1,29 @@
+import BaseObject from './base.js'
 import Events from './events'
-import EventsManager from './events-manager'
 import Core from './core'
 
-export default class Player {
+export default class Player extends BaseObject {
+
   constructor(options) {
-    this.eventsManager = new EventsManager()
-    this.core = new Core(this.eventsManager, options)
-    this.bind()
+    super()
+    this.core = new Core(options, this.manager)
     this.startPlayer()
 
-    return this.eventsManager
+    return this.manager
   }
 
   bind() {
-    this.eventsManager.addListener(Events.HOOK_PLUGIN, this.onHookPlugin, this)
+    this.manager.addListener(Events.HOOK_PLUGIN, this.onHookPlugin, this)
   }
 
   startPlayer(options) {
-    this.eventsManager.trigger(Events.HOOK_START).then(() => {
-      this.eventsManager.trigger(Events.HOOK_PLUGIN)
+    this.manager.trigger(Events.HOOK_START).then(() => {
+      this.manager.trigger(Events.HOOK_PLUGIN)
     })
   }
 
   onHookPlugin() {
-    this.eventsManager.trigger(Events.HOOK_READY)
+    this.manager.trigger(Events.HOOK_READY)
   }
 
 }

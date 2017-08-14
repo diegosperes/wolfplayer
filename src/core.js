@@ -1,19 +1,19 @@
+import BaseObject from './base.js'
 import Events from './events'
 import HTML5Video from './playback'
 
-export default class Core {
+export default class Core extends BaseObject {
 
-  constructor(eventsManager, options) {
+  constructor(options, manager) {
+    super(manager)
     this.options = options
-    this.eventsManager = eventsManager
-    this.bind()
   }
 
   bind() {
-    this.eventsManager.addListener(Events.HOOK_START, this.onHookStart, this)
-    this.eventsManager.addListener(Events.API_PLAY, this.onPlay, this)
-    this.eventsManager.addListener(Events.API_PAUSE, this.onPause, this)
-    this.eventsManager.addListener(Events.API_SEEK, this.onSeek, this)
+    this.manager.addListener(Events.HOOK_START, this.onHookStart, this)
+    this.manager.addListener(Events.API_PLAY, this.onPlay, this)
+    this.manager.addListener(Events.API_PAUSE, this.onPause, this)
+    this.manager.addListener(Events.API_SEEK, this.onSeek, this)
   }
 
   onHookStart() {
@@ -26,7 +26,7 @@ export default class Core {
   onSeek(seconds) { this.playback.seek(seconds) }
 
   playbackSetup() {
-    this.playback = new HTML5Video(this.options.src, this.eventsManager)
+    this.playback = new HTML5Video(this.options.src, this.manager)
     this.playback.setup(this.options.playback)
   }
 
