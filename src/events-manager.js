@@ -16,18 +16,20 @@ export default class EventsManager {
   // TO-DO: treat erro from callback
   trigger(event, args) {
     return new Promise(resolve => {
+      let counter = 0
+      let expectedCounter = 0
+
       if (!event || !(event in this._events)) {
         resolve()
 
       } else {
-        let counter = 0
-        let expectedCounter = this._events[event].length
-
+        expectedCounter = this._events[event].length
         for(let listerner of this._events[event]) {
           setTimeout(() => {
-            counter += 1
-            listerner.callback.apply(listerner.context, args)
-            if (counter === expectedCounter) resolve()
+            let _resolve = () => { counter += 1; if (counter === expectedCounter) resolve() }
+            let result = listerner.callback.apply(listerner.context, args)
+            if (result instanceof Promise) result.then(() => _resolve())
+            else _resolve()
           }, 0)
         }
       }

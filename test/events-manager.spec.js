@@ -1,14 +1,31 @@
 import EventsManager from '../src/events-manager'
 
-/*
-  Use this proxy to simulate block operation
-*/
-let proxy = (callback, ms) => {
-  let waitTime = new Date().getTime() + ms
 
-  return () => {
-    while (new Date().getTime() < waitTime) {}
-    callback()
+let proxy = {
+  blockOperation: (callback, ms) => {
+    /*
+      Use to simulate block operation
+    */
+    let waitTime = new Date().getTime() + ms
+
+    return () => {
+      while (new Date().getTime() < waitTime) {}
+      callback()
+    }
+  },
+
+  promiseOperation: (callback, ms) => {
+    /*
+      Use to simulate promise operation
+    */
+    return () => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          callback()
+          resolve()
+        }, ms)
+      })
+    }
   }
 }
 
@@ -51,8 +68,8 @@ describe('Events Manager', () => {
     let callback1 = sinon.spy()
     let callback2 = sinon.spy()
 
-    eventsManager.addListener('some-event', proxy(callback1, time))
-    eventsManager.addListener('some-event', proxy(callback2, time))
+    eventsManager.addListener('some-event', proxy.blockOperation(callback1, time))
+    eventsManager.addListener('some-event', proxy.blockOperation(callback2, time))
     eventsManager.trigger('some-event')
 
     setTimeout(() => {
@@ -60,5 +77,19 @@ describe('Events Manager', () => {
       callback2.should.have.been.called
       done()
     }, time)
+  })
+
+  it('wait listener promise to resolve promise event', (done) => {
+    let time = 1500
+    let callback1 = sinon.spy()
+    let callback2 = sinon.spy()
+
+    eventsManager.addListener('some-event', proxy.promiseOperation(callback1, time))
+    eventsManager.addListener('some-event', proxy.promiseOperation(callback2, time))
+    eventsManager.trigger('some-event').then(() => {
+      callback1.should.have.been.called
+      callback2.should.have.been.called
+      done()
+    })
   })
 })

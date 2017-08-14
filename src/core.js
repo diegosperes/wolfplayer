@@ -21,8 +21,8 @@ export default class Core {
     this.attachTo()
   }
 
-  onPlay() { this.playback.play() }
-  onPause() { this.playback.pause() }
+  onPlay() { return this.playback.play() }
+  onPause() { return this.playback.pause() }
   onSeek(seconds) { this.playback.seek(seconds) }
 
   playbackSetup() {
