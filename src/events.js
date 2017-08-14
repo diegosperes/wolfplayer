@@ -8,9 +8,13 @@ export default class Events {
   static get PLAYBACK_PAUSE() { return 'playback:pause' }
   static get PLAYBACK_SEEKING() { return 'playback:seeking' }
   static get PLAYBACK_SEEKED() { return 'playback:seeked' }
+  static get PLAYBACK_TIMEUPDATE() { return 'playback:timeupdate' }
+  static get PLAYBACK_PROGRESS() { return 'playback:progress' }
+  static get PLAYBACK_RATECHANGE() { return 'playback:ratechange' }
 
   static get API_PLAY() { return 'api:play' }
   static get API_PAUSE() { return 'api:pause' }
   static get API_SEEK() { return 'api:seek' }
+  static get API_RATECHANGE() { return 'api:ratechange' }
 
 }

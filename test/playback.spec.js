@@ -44,6 +44,36 @@ describe('Playback', () => {
       videoElement.play().then(() => videoElement.pause())
     })
 
+    it('should trigger timeupdate event', (done) => {
+      player.addListener(Events.PLAYBACK_TIMEUPDATE, callback)
+      player.addListener(Events.PLAYBACK_TIMEUPDATE, () => {
+        callback.should.have.been.called
+        done()
+      })
+
+      videoElement.play()
+    })
+
+    it('should trigger progress event', (done) => {
+      player.addListener(Events.PLAYBACK_PROGRESS, callback)
+      player.addListener(Events.PLAYBACK_PROGRESS, () => {
+        callback.should.have.been.called
+        done()
+      })
+
+      videoElement.dispatchEvent(new Event('progress'))
+    })
+
+    it('should trigger ratechange event', (done) => {
+      player.addListener(Events.PLAYBACK_RATECHANGE, callback)
+      player.addListener(Events.PLAYBACK_RATECHANGE, () => {
+        callback.should.have.been.called
+        done()
+      })
+
+      videoElement.play().then(() => videoElement.playbackRate = 2)
+    })
+
     it('should trigger seek event', (done) => {
       player.addListener(Events.PLAYBACK_SEEKING, callback)
       player.addListener(Events.PLAYBACK_SEEKED, () => {

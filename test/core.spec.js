@@ -39,6 +39,16 @@ describe('Core', () => {
       player.trigger(Events.API_PLAY).then(() => player.trigger(Events.API_PAUSE))
     })
 
+    it('should trigger ratechange event', (done) => {
+      player.addListener(Events.PLAYBACK_RATECHANGE, callback)
+      player.addListener(Events.PLAYBACK_RATECHANGE, () => {
+        callback.should.have.been.called
+        done()
+      })
+
+      player.trigger(Events.API_PLAY).then(() => player.trigger(Events.API_RATECHANGE, [2]))
+    })
+
     it('should trigger seek event', (done) => {
       player.addListener(Events.PLAYBACK_SEEKING, callback)
       player.addListener(Events.PLAYBACK_SEEKED, () => {

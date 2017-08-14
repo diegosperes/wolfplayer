@@ -15,16 +15,23 @@ export default class HTML5Playback extends BaseObject {
     this.mediaElement.addEventListener('pause', (event) => this.onPause(event))
     this.mediaElement.addEventListener('seeking', (event) => this.onSeeking(event))
     this.mediaElement.addEventListener('seeked', (event) => this.onSeeked(event))
+    this.mediaElement.addEventListener('timeupdate', (event) => this.onTimeupdate(event))
+    this.mediaElement.addEventListener('progress', (event) => this.onProgress(event))
+    this.mediaElement.addEventListener('ratechange', (event) => this.onRatechange(event))
   }
 
   onPlay(event) { this.manager.trigger(Events.PLAYBACK_PLAY, [event]) }
   onPause(event) { this.manager.trigger(Events.PLAYBACK_PAUSE, [event]) }
   onSeeking(event) { this.manager.trigger(Events.PLAYBACK_SEEKING, [event]) }
   onSeeked(event) { this.manager.trigger(Events.PLAYBACK_SEEKED, [event]) }
+  onTimeupdate(event) { this.manager.trigger(Events.PLAYBACK_TIMEUPDATE, [event]) }
+  onProgress(event) { this.manager.trigger(Events.PLAYBACK_PROGRESS, [event]) }
+  onRatechange(event) { this.manager.trigger(Events.PLAYBACK_RATECHANGE, [event]) }
 
   play() { return this.mediaElement.play() }
   pause() { return this.mediaElement.pause() }
   seek(seconds) { this.mediaElement.currentTime = seconds }
+  changeRate(rate) { this.mediaElement.playbackRate = rate }
 
   setup(options) {
     this.mediaElement.setAttribute('src', this.source)
