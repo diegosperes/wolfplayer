@@ -1,7 +1,19 @@
 import BaseObject from './base.js'
-import Events from './events'
 
 export default class HTML5Playback extends BaseObject {
+
+  static get register() {
+    return {
+      PLAYBACK_PLAY: 'playback:play',
+      PLAYBACK_PAUSE: 'playback:pause',
+      PLAYBACK_SEEKING: 'playback:seeking',
+      PLAYBACK_SEEKED: 'playback:seeked',
+      PLAYBACK_TIMEUPDATE: 'playback:timeupdate',
+      PLAYBACK_PROGRESS: 'playback:progress',
+      PLAYBACK_RATECHANGE: 'playback:ratechange',
+      PLAYBACK_VOLUMECHANGE: 'playback:volumechange'
+    }
+  }
 
   constructor(source, manager) {
     super(manager)
@@ -40,14 +52,14 @@ export default class HTML5Playback extends BaseObject {
   _proxyEvent(event) { this.manager.trigger(this._getEventType(event), [event]) }
   _getEventType(event) {
     return {
-      play: Events.PLAYBACK_PLAY,
-      pause: Events.PLAYBACK_PAUSE,
-      seeking: Events.PLAYBACK_SEEKING,
-      seeked: Events.PLAYBACK_SEEKED,
-      timeupdate: Events.PLAYBACK_TIMEUPDATE,
-      progress: Events.PLAYBACK_PROGRESS,
-      ratechange: Events.PLAYBACK_RATECHANGE,
-      volumechange: Events.PLAYBACK_VOLUMECHANGE,
+      play: this.events.PLAYBACK_PLAY,
+      pause: this.events.PLAYBACK_PAUSE,
+      seeking: this.events.PLAYBACK_SEEKING,
+      seeked: this.events.PLAYBACK_SEEKED,
+      timeupdate: this.events.PLAYBACK_TIMEUPDATE,
+      progress: this.events.PLAYBACK_PROGRESS,
+      ratechange: this.events.PLAYBACK_RATECHANGE,
+      volumechange: this.events.PLAYBACK_VOLUMECHANGE,
     }[event.type]
   }
 }

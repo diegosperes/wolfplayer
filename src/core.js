@@ -1,8 +1,17 @@
 import BaseObject from './base.js'
-import Events from './events'
 import HTML5Video from './playback'
 
 export default class Core extends BaseObject {
+
+  static get register() {
+    return {
+      API_PLAY: 'api:play',
+      API_PAUSE: 'api:pause',
+      API_SEEK: 'api:seek',
+      API_RATECHANGE: 'api:ratechange',
+      API_VOLUMECHANGE: 'api:volumechange'
+    }
+  }
 
   constructor(options, manager) {
     super(manager)
@@ -10,12 +19,12 @@ export default class Core extends BaseObject {
   }
 
   bind() {
-    this.manager.addListener(Events.HOOK_START, this.onHookStart, this)
-    this.manager.addListener(Events.API_PLAY, this.onPlay, this)
-    this.manager.addListener(Events.API_PAUSE, this.onPause, this)
-    this.manager.addListener(Events.API_SEEK, this.onSeek, this)
-    this.manager.addListener(Events.API_RATECHANGE, this.onRatechange, this)
-    this.manager.addListener(Events.API_VOLUMECHANGE, this.onVolumechange, this)
+    this.manager.addListener(this.events.HOOK_START, this.onHookStart, this)
+    this.manager.addListener(this.events.API_PLAY, this.onPlay, this)
+    this.manager.addListener(this.events.API_PAUSE, this.onPause, this)
+    this.manager.addListener(this.events.API_SEEK, this.onSeek, this)
+    this.manager.addListener(this.events.API_RATECHANGE, this.onRatechange, this)
+    this.manager.addListener(this.events.API_VOLUMECHANGE, this.onVolumechange, this)
   }
 
   onHookStart() {

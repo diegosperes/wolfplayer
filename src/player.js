@@ -1,8 +1,15 @@
 import BaseObject from './base.js'
-import Events from './events'
 import Core from './core'
 
 export default class Player extends BaseObject {
+
+  static get register() {
+    return {
+      HOOK_START: 'hook:start',
+      HOOK_PLUGIN: 'hook:plugin',
+      HOOK_READY: 'hook:ready'
+    }
+  }
 
   constructor(options) {
     super()
@@ -13,17 +20,17 @@ export default class Player extends BaseObject {
   }
 
   bind() {
-    this.manager.addListener(Events.HOOK_PLUGIN, this.onHookPlugin, this)
+    this.manager.addListener(this.events.HOOK_PLUGIN, this.onHookPlugin, this)
   }
 
   startPlayer(options) {
-    this.manager.trigger(Events.HOOK_START).then(() => {
-      this.manager.trigger(Events.HOOK_PLUGIN)
+    this.manager.trigger(this.events.HOOK_START).then(() => {
+      this.manager.trigger(this.events.HOOK_PLUGIN)
     })
   }
 
   onHookPlugin() {
-    this.manager.trigger(Events.HOOK_READY)
+    this.manager.trigger(this.events.HOOK_READY)
   }
 
 }

@@ -1,22 +1,57 @@
-export default class Events {
+class Events {
+  register(events) {
+    for(let event in events) {
+      if (event in this) throw `${event} event already exist`
+      this[event] = events[event]
+    }
+  }
+}
 
-  static get HOOK_START() { return 'hook:start' }
-  static get HOOK_PLUGIN() { return 'hook:plugin' }
-  static get HOOK_READY() { return 'hook:ready' }
+class Manager {
 
-  static get PLAYBACK_PLAY() { return 'playback:play' }
-  static get PLAYBACK_PAUSE() { return 'playback:pause' }
-  static get PLAYBACK_SEEKING() { return 'playback:seeking' }
-  static get PLAYBACK_SEEKED() { return 'playback:seeked' }
-  static get PLAYBACK_TIMEUPDATE() { return 'playback:timeupdate' }
-  static get PLAYBACK_PROGRESS() { return 'playback:progress' }
-  static get PLAYBACK_RATECHANGE() { return 'playback:ratechange' }
-  static get PLAYBACK_VOLUMECHANGE() { return 'playback:volumechange' }
+  constructor() {
+    this.events = new Events()
+    this._eventsMap = {}
+  }
 
-  static get API_PLAY() { return 'api:play' }
-  static get API_PAUSE() { return 'api:pause' }
-  static get API_SEEK() { return 'api:seek' }
-  static get API_RATECHANGE() { return 'api:ratechange' }
-  static get API_VOLUMECHANGE() { return 'api:volumechange' }
+  addListener(event, callback, context=window) {
+    if (!(event in this._eventsMap)) this._eventsMap[event] = []
 
+    this._eventsMap[event].push({
+      callback: callback,
+      context: context
+    })
+  }
+
+  trigger(event, args) {
+    return new Promise(resolve => {
+      if (!event || !(event in this._eventsMap)) {
+        resolve()
+
+      } else {
+        let counter = 0
+        let expectedCounter = this._eventsMap[event].length
+
+        for(let listerner of this._eventsMap[event]) {
+          setTimeout(() => {
+            let _resolve = () => { counter += 1; if (counter === expectedCounter) resolve() }
+
+            try {
+              let result = listerner.callback.apply(listerner.context, args)
+              if (result instanceof Promise) result.then(() => _resolve(), () => _resolve())
+              else _resolve()
+
+            } catch (error) {
+              _resolve()
+            }
+          }, 0)
+        }
+      }
+    })
+  }
+}
+
+export default {
+  Events,
+  Manager
 }

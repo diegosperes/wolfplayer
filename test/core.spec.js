@@ -1,6 +1,5 @@
 import utils from './utils'
 
-import Events from '../src/events'
 import WolfPlayer from '../src/player'
 
 describe('Core', () => {
@@ -16,57 +15,57 @@ describe('Core', () => {
     beforeEach((done) => {
       player = new WolfPlayer(utils.baseOptions)
       callback = sinon.spy()
-      player.addListener(Events.HOOK_READY, () => done())
+      player.addListener(player.events.HOOK_READY, () => done())
     })
 
     it('should trigger play event', (done) => {
-      player.addListener(Events.PLAYBACK_PLAY, callback)
-      player.addListener(Events.PLAYBACK_PLAY, () => {
+      player.addListener(player.events.PLAYBACK_PLAY, callback)
+      player.addListener(player.events.PLAYBACK_PLAY, () => {
         callback.should.have.been.called
         done()
       })
 
-      player.trigger(Events.API_PLAY)
+      player.trigger(player.events.API_PLAY)
     })
 
     it('should trigger pause event', (done) => {
-      player.addListener(Events.PLAYBACK_PAUSE, callback)
-      player.addListener(Events.PLAYBACK_PAUSE, () => {
+      player.addListener(player.events.PLAYBACK_PAUSE, callback)
+      player.addListener(player.events.PLAYBACK_PAUSE, () => {
         callback.should.have.been.called
         done()
       })
 
-      player.trigger(Events.API_PLAY).then(() => player.trigger(Events.API_PAUSE))
+      player.trigger(player.events.API_PLAY).then(() => player.trigger(player.events.API_PAUSE))
     })
 
     it('should trigger ratechange event', (done) => {
-      player.addListener(Events.PLAYBACK_RATECHANGE, callback)
-      player.addListener(Events.PLAYBACK_RATECHANGE, () => {
+      player.addListener(player.events.PLAYBACK_RATECHANGE, callback)
+      player.addListener(player.events.PLAYBACK_RATECHANGE, () => {
         callback.should.have.been.called
         done()
       })
 
-      player.trigger(Events.API_PLAY).then(() => player.trigger(Events.API_RATECHANGE, [2]))
+      player.trigger(player.events.API_PLAY).then(() => player.trigger(player.events.API_RATECHANGE, [2]))
     })
 
     it('should trigger volumechange event', (done) => {
-      player.addListener(Events.PLAYBACK_VOLUMECHANGE, callback)
-      player.addListener(Events.PLAYBACK_VOLUMECHANGE, () => {
+      player.addListener(player.events.PLAYBACK_VOLUMECHANGE, callback)
+      player.addListener(player.events.PLAYBACK_VOLUMECHANGE, () => {
         callback.should.have.been.called
         done()
       })
 
-      player.trigger(Events.API_PLAY).then(() => player.trigger(Events.API_VOLUMECHANGE, [0.8]))
+      player.trigger(player.events.API_PLAY).then(() => player.trigger(player.events.API_VOLUMECHANGE, [0.8]))
     })
 
     it('should trigger seek event', (done) => {
-      player.addListener(Events.PLAYBACK_SEEKING, callback)
-      player.addListener(Events.PLAYBACK_SEEKED, () => {
+      player.addListener(player.events.PLAYBACK_SEEKING, callback)
+      player.addListener(player.events.PLAYBACK_SEEKED, () => {
         callback.should.have.been.called
         done()
       })
 
-      player.trigger(Events.API_PLAY).then(() => player.trigger(Events.API_SEEK, [2]))
+      player.trigger(player.events.API_PLAY).then(() => player.trigger(player.events.API_SEEK, [2]))
     })
   })
 
@@ -74,7 +73,7 @@ describe('Core', () => {
     it('is a string', (done) => {
       let player = new WolfPlayer({ parent: 'body', src: 'base/public/sample.mp4' })
 
-      player.addListener(Events.HOOK_READY, () => {
+      player.addListener(player.events.HOOK_READY, () => {
         let videoElement = document.querySelector('body video')
         expect(videoElement.tagName).to.be.equal('VIDEO')
         done()
@@ -84,7 +83,7 @@ describe('Core', () => {
     it('is a DOM element', (done) => {
       let player =  new WolfPlayer({ parent: document.body, src: 'base/public/sample.mp4' })
       
-      player.addListener(Events.HOOK_READY, () => {
+      player.addListener(player.events.HOOK_READY, () => {
         let videoElement = document.querySelector('body video')
         expect(videoElement.tagName).to.be.equal('VIDEO')
         done()
