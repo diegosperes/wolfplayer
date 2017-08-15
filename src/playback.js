@@ -21,12 +21,6 @@ export default class HTML5Playback extends BaseObject {
     this.mediaElement.addEventListener('volumechange', (event) => this._proxyEvent(event))
   }
 
-  play() { return this.mediaElement.play() }
-  pause() { return this.mediaElement.pause() }
-  seek(seconds) { this.mediaElement.currentTime = seconds }
-  changeRate(rate) { this.mediaElement.playbackRate = rate }
-  changeVolume(volume) { this.mediaElement.volume = volume }
-
   setup(options) {
     this.mediaElement.setAttribute('src', this.source)
 
@@ -36,9 +30,12 @@ export default class HTML5Playback extends BaseObject {
     if ((!options || !('preload' in options)) || options.preload) this.mediaElement.setAttribute('preload', (options && options.preload) || 'metadata')
   }
 
-  attachTo(container) {
-    container.appendChild(this.mediaElement)
-  }
+  play() { return this.mediaElement.play() }
+  pause() { return this.mediaElement.pause() }
+  seek(seconds) { this.mediaElement.currentTime = seconds }
+  changeRate(rate) { this.mediaElement.playbackRate = rate }
+  changeVolume(volume) { this.mediaElement.volume = volume }
+  attachTo(container) { container.appendChild(this.mediaElement) }
 
   _proxyEvent(event) { this.manager.trigger(this._getEventType(event), [event]) }
   _getEventType(event) {
