@@ -11,24 +11,15 @@ export default class HTML5Playback extends BaseObject {
   bind() {
     this.mediaElement = document.createElement('video')
 
-    this.mediaElement.addEventListener('play', (event) => this.onPlay(event))
-    this.mediaElement.addEventListener('pause', (event) => this.onPause(event))
-    this.mediaElement.addEventListener('seeking', (event) => this.onSeeking(event))
-    this.mediaElement.addEventListener('seeked', (event) => this.onSeeked(event))
-    this.mediaElement.addEventListener('timeupdate', (event) => this.onTimeupdate(event))
-    this.mediaElement.addEventListener('progress', (event) => this.onProgress(event))
-    this.mediaElement.addEventListener('ratechange', (event) => this.onRatechange(event))
-    this.mediaElement.addEventListener('volumechange', (event) => this.onVolumechange(event))
+    this.mediaElement.addEventListener('play', (event) => this._proxyEvent(event))
+    this.mediaElement.addEventListener('pause', (event) => this._proxyEvent(event))
+    this.mediaElement.addEventListener('seeking', (event) => this._proxyEvent(event))
+    this.mediaElement.addEventListener('seeked', (event) => this._proxyEvent(event))
+    this.mediaElement.addEventListener('timeupdate', (event) => this._proxyEvent(event))
+    this.mediaElement.addEventListener('progress', (event) => this._proxyEvent(event))
+    this.mediaElement.addEventListener('ratechange', (event) => this._proxyEvent(event))
+    this.mediaElement.addEventListener('volumechange', (event) => this._proxyEvent(event))
   }
-
-  onPlay(event) { this.manager.trigger(Events.PLAYBACK_PLAY, [event]) }
-  onPause(event) { this.manager.trigger(Events.PLAYBACK_PAUSE, [event]) }
-  onSeeking(event) { this.manager.trigger(Events.PLAYBACK_SEEKING, [event]) }
-  onSeeked(event) { this.manager.trigger(Events.PLAYBACK_SEEKED, [event]) }
-  onTimeupdate(event) { this.manager.trigger(Events.PLAYBACK_TIMEUPDATE, [event]) }
-  onProgress(event) { this.manager.trigger(Events.PLAYBACK_PROGRESS, [event]) }
-  onRatechange(event) { this.manager.trigger(Events.PLAYBACK_RATECHANGE, [event]) }
-  onVolumechange(event) { this.manager.trigger(Events.PLAYBACK_VOLUMECHANGE, [event]) }
 
   play() { return this.mediaElement.play() }
   pause() { return this.mediaElement.pause() }
@@ -47,5 +38,19 @@ export default class HTML5Playback extends BaseObject {
 
   attachTo(container) {
     container.appendChild(this.mediaElement)
+  }
+
+  _proxyEvent(event) { this.manager.trigger(this._getEventType(event), [event]) }
+  _getEventType(event) {
+    return {
+      play: Events.PLAYBACK_PLAY,
+      pause: Events.PLAYBACK_PAUSE,
+      seeking: Events.PLAYBACK_SEEKING,
+      seeked: Events.PLAYBACK_SEEKED,
+      timeupdate: Events.PLAYBACK_TIMEUPDATE,
+      progress: Events.PLAYBACK_PROGRESS,
+      ratechange: Events.PLAYBACK_RATECHANGE,
+      volumechange: Events.PLAYBACK_VOLUMECHANGE,
+    }[event.type]
   }
 }
