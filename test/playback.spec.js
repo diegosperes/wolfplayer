@@ -23,6 +23,11 @@ describe('Playback', () => {
       })
     })
 
+    it('insert video with correct source', () => {
+      let videoElement = document.querySelector('body video')
+      expect(videoElement.src).to.match(/http:\/\/localhost:[0-9]{4}\/base\/public\/sample\.mp4/)
+    })
+
     it('should trigger play event', (done) => {
       player.addListener(player.events.PLAYBACK_PLAY, callback)
       player.addListener(player.events.PLAYBACK_PLAY, () => {
@@ -92,15 +97,48 @@ describe('Playback', () => {
 
       videoElement.play().then(() => videoElement.currentTime = 2)
     })
-  })
 
-  it('insert video with correct source', (done) => {
-    let player = new WolfPlayer(utils.baseOptions)
+    describe('should trigger buffering event when', () => {
 
-    player.addListener(player.events.HOOK_READY, () => {
-      let videoElement = document.querySelector('body video')
-      expect(videoElement.src).to.match(/http:\/\/localhost:[0-9]{4}\/base\/public\/sample\.mp4/)
-      done()
+      it('loadstart is fired', (done) => {
+        player.addListener(player.events.PLAYBACK_BUFFERING, callback)
+        player.addListener(player.events.PLAYBACK_BUFFERING, () => {
+          callback.should.have.been.called
+          done()
+        })
+
+        videoElement.dispatchEvent(new Event('loadstart'))
+      })
+
+      it('loadeddata is fired', (done) => {
+        player.addListener(player.events.PLAYBACK_BUFFERING, callback)
+        player.addListener(player.events.PLAYBACK_BUFFERING, () => {
+          callback.should.have.been.called
+          done()
+        })
+
+        videoElement.dispatchEvent(new Event('loaddata'))
+      })
+    })
+
+    it('should trigger bufferload event', (done) => {
+      player.addListener(player.events.PLAYBACK_BUFFELOAD, callback)
+      player.addListener(player.events.PLAYBACK_BUFFELOAD, () => {
+        callback.should.have.been.called
+        done()
+      })
+
+      videoElement.dispatchEvent(new Event('canplay'))
+    })
+
+    it('should trigger bufferfull event', (done) => {
+      player.addListener(player.events.PLAYBACK_BUFFEFULL, callback)
+      player.addListener(player.events.PLAYBACK_BUFFEFULL, () => {
+        callback.should.have.been.called
+        done()
+      })
+
+      videoElement.dispatchEvent(new Event('canplaythrough'))
     })
   })
 

@@ -11,7 +11,10 @@ export default class HTML5Playback extends BaseObject {
       PLAYBACK_TIMEUPDATE: 'playback:timeupdate',
       PLAYBACK_PROGRESS: 'playback:progress',
       PLAYBACK_RATECHANGE: 'playback:ratechange',
-      PLAYBACK_VOLUMECHANGE: 'playback:volumechange'
+      PLAYBACK_VOLUMECHANGE: 'playback:volumechange',
+      PLAYBACK_BUFFERING: 'playback:buffering',
+      PLAYBACK_BUFFELOAD: 'playback:bufferload',
+      PLAYBACK_BUFFEFULL: 'playback:bufferfull'
     }
   }
 
@@ -31,6 +34,10 @@ export default class HTML5Playback extends BaseObject {
     this.mediaElement.addEventListener('progress', (event) => this._proxyEvent(event))
     this.mediaElement.addEventListener('ratechange', (event) => this._proxyEvent(event))
     this.mediaElement.addEventListener('volumechange', (event) => this._proxyEvent(event))
+    this.mediaElement.addEventListener('loadstart', (event) => this._proxyEvent(event))
+    this.mediaElement.addEventListener('loaddata', (event) => this._proxyEvent(event))
+    this.mediaElement.addEventListener('canplay', (event) => this._proxyEvent(event))
+    this.mediaElement.addEventListener('canplaythrough', (event) => this._proxyEvent(event))
   }
 
   setup(options) {
@@ -60,6 +67,10 @@ export default class HTML5Playback extends BaseObject {
       progress: this.events.PLAYBACK_PROGRESS,
       ratechange: this.events.PLAYBACK_RATECHANGE,
       volumechange: this.events.PLAYBACK_VOLUMECHANGE,
+      loadstart: this.events.PLAYBACK_BUFFERING,
+      loaddata: this.events.PLAYBACK_BUFFERING,
+      canplay: this.events.PLAYBACK_BUFFELOAD,
+      canplaythrough: this.events.PLAYBACK_BUFFEFULL
     }[event.type]
   }
 }
