@@ -18,6 +18,25 @@ export default class HTML5Playback extends BaseObject {
     }
   }
 
+  get eventsByType() {
+    !this._eventsType && (this._eventsType = {
+      play: this.events.PLAYBACK_PLAY,
+      pause: this.events.PLAYBACK_PAUSE,
+      seeking: this.events.PLAYBACK_SEEKING,
+      seeked: this.events.PLAYBACK_SEEKED,
+      timeupdate: this.events.PLAYBACK_TIMEUPDATE,
+      progress: this.events.PLAYBACK_PROGRESS,
+      ratechange: this.events.PLAYBACK_RATECHANGE,
+      volumechange: this.events.PLAYBACK_VOLUMECHANGE,
+      loadstart: this.events.PLAYBACK_BUFFERING,
+      loaddata: this.events.PLAYBACK_BUFFERING,
+      canplay: this.events.PLAYBACK_BUFFELOAD,
+      canplaythrough: this.events.PLAYBACK_BUFFEFULL
+    })
+
+    return this._eventsType
+  }
+
   constructor(source, manager) {
     super(manager)
     this.source = source
@@ -56,21 +75,5 @@ export default class HTML5Playback extends BaseObject {
   changeVolume(volume) { this.mediaElement.volume = volume }
   attachTo(container) { container.appendChild(this.mediaElement) }
 
-  _proxyEvent(event) { this.manager.trigger(this._getEventType(event), [event]) }
-  _getEventType(event) {
-    return {
-      play: this.events.PLAYBACK_PLAY,
-      pause: this.events.PLAYBACK_PAUSE,
-      seeking: this.events.PLAYBACK_SEEKING,
-      seeked: this.events.PLAYBACK_SEEKED,
-      timeupdate: this.events.PLAYBACK_TIMEUPDATE,
-      progress: this.events.PLAYBACK_PROGRESS,
-      ratechange: this.events.PLAYBACK_RATECHANGE,
-      volumechange: this.events.PLAYBACK_VOLUMECHANGE,
-      loadstart: this.events.PLAYBACK_BUFFERING,
-      loaddata: this.events.PLAYBACK_BUFFERING,
-      canplay: this.events.PLAYBACK_BUFFELOAD,
-      canplaythrough: this.events.PLAYBACK_BUFFEFULL
-    }[event.type]
-  }
+  _proxyEvent(event) { this.manager.trigger(this.eventsByType[event.type], [event]) }
 }
