@@ -19,7 +19,7 @@ module.exports = function(config) {
     files: [
       { pattern: 'public/sample.mp4', included: false, served: true },
       'node_modules/babel-polyfill/dist/polyfill.js',
-      'test/*.spec.js'
+      'test/index.spec.js'
     ],
 
 
@@ -32,7 +32,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'test/*.spec.js': ['webpack']
+      'test/index.spec.js': ['webpack']
     },
 
 
