@@ -27,7 +27,7 @@
     "webpack-dev-server": "^2.6.1"
   },
   "scripts": {
-    "server": "webpack-dev-server --host 0.0.0.0 --content-base public/ --output-public-path latest/ --hot",
+    "server": "webpack-dev-server --host 0.0.0.0 --content-base public/ --output-public-path latest/",
     "test": "./node_modules/karma/bin/karma start --single-run"
   }
 }
