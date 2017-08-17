@@ -24,28 +24,19 @@ class Manager {
   }
 
   trigger(event, args) {
+    if (!event || !(event in this._eventsMap)) return Promise.resolve()
+
     return new Promise(resolve => {
-      if (!event || !(event in this._eventsMap)) {
-        resolve()
+      let counter = 0
+      let expectedCounter = this._eventsMap[event].length
+      let _resolve = () => { counter += 1; if (counter === expectedCounter) resolve() }
 
-      } else {
-        let counter = 0
-        let expectedCounter = this._eventsMap[event].length
-
-        for(let listerner of this._eventsMap[event]) {
-          setTimeout(() => {
-            let _resolve = () => { counter += 1; if (counter === expectedCounter) resolve() }
-
-            try {
-              let result = listerner.callback.apply(listerner.context, args)
-              if (result instanceof Promise) result.then(() => _resolve(), () => _resolve())
-              else _resolve()
-
-            } catch (error) {
-              _resolve()
-            }
-          }, 0)
-        }
+      for(let listerner of this._eventsMap[event]) {
+        new Promise((innerResolve, innerReject) => {
+          let result = listerner.callback.apply(listerner.context, args)
+          if (result instanceof Promise) result.then(() => innerResolve(), () => innerReject())
+          else innerResolve()
+        }).then(_resolve, _resolve)
       }
     })
   }

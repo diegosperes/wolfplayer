@@ -1,19 +1,6 @@
 import { Events, Manager } from '../src/events'
 
-
 let proxy = {
-  blockOperation: (callback, ms) => {
-    /*
-      Use to simulate block operation
-    */
-    let waitTime = new Date().getTime() + ms
-
-    return () => {
-      while (new Date().getTime() < waitTime) {}
-      callback()
-    }
-  },
-
   promiseOperation: (callback, ms) => {
     /*
       Use to simulate promise operation
@@ -82,22 +69,6 @@ describe('Events Manager', () => {
       callback.should.not.have.been.called
       done()
     })
-  })
-
-  it('call async callback', (done) => {
-    let time = 1500
-    let callback1 = sinon.spy()
-    let callback2 = sinon.spy()
-
-    manager.addListener('some-event', proxy.blockOperation(callback1, time))
-    manager.addListener('some-event', proxy.blockOperation(callback2, time))
-    manager.trigger('some-event')
-
-    setTimeout(() => {
-      callback1.should.have.been.called
-      callback2.should.have.been.called
-      done()
-    }, time)
   })
 
   it('wait listener promise to resolve promise event', (done) => {
