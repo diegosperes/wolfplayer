@@ -1,6 +1,9 @@
 module.exports = {
   context: __dirname + "/src",
-  entry: ['babel-polyfill', "./player.js"],
+  entry: {
+    Player: ['babel-polyfill', './player.js'],
+    Plugin: './plugins/index.js'
+  },
   module: {
     rules: [
       {
@@ -13,8 +16,8 @@ module.exports = {
   },
   output: {
     path: __dirname + "/dist",
-    filename: "wolfplayer.js",
-    library: 'WolfPlayer',
+    filename: "wolf[name].js",
+    library: 'Wolf[name]',
     libraryTarget: 'umd'
   }
 }

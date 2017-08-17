@@ -1,9 +1,9 @@
-import BaseObject from './base.js'
+import { BaseObject } from './base.js'
 import HTML5Video from './playback'
 
 export default class Core extends BaseObject {
 
-  static get register() {
+  static get eventsToRegister() {
     return {
       API_PLAY: 'api:play',
       API_PAUSE: 'api:pause',

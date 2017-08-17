@@ -1,8 +1,8 @@
-import BaseObject from './base.js'
+import { BaseObject } from './base.js'
 
 export default class HTML5Playback extends BaseObject {
 
-  static get register() {
+  static get eventsToRegister() {
     return {
       PLAYBACK_PLAY: 'playback:play',
       PLAYBACK_PAUSE: 'playback:pause',

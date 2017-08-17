@@ -1,16 +1,28 @@
 import { Manager } from './events'
 
-export default class Baseobject {
+class BaseObject {
 
-  static get register() { return {} }
+  static get eventsToRegister() { return {} }
   get events() { return this.manager.events }
 
   constructor(manager) {
     if(!manager) this.manager = new Manager()
     else this.manager = manager
-    this.events.register(this.constructor.register)
+    this.events.register(this.constructor.eventsToRegister)
     this.bind()
   }
 
-  bind() { throw 'bind method not implemented' }
+  bind() {}
+}
+
+class Plugin extends BaseObject {
+  constructor(manager, options) {
+    super(manager)
+    this.options = options || {}
+  }
+}
+
+export default {
+  BaseObject,
+  Plugin
 }
