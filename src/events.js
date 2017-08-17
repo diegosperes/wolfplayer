@@ -30,13 +30,14 @@ class Manager {
       let counter = 0
       let expectedCounter = this._eventsMap[event].length
       let _resolve = () => { counter += 1; if (counter === expectedCounter) resolve() }
+      let _reject = (error) => { this.trigger(this.events.PLAYER_ERROR, [error]); _resolve() }
 
       for(let listerner of this._eventsMap[event]) {
         new Promise((innerResolve, innerReject) => {
           let result = listerner.callback.apply(listerner.context, args)
-          if (result instanceof Promise) result.then(() => innerResolve(), () => innerReject())
+          if (result instanceof Promise) result.then(innerResolve, innerReject)
           else innerResolve()
-        }).then(_resolve, _resolve)
+        }).then(_resolve, _reject)
       }
     })
   }

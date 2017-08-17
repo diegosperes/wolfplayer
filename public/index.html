@@ -2,15 +2,20 @@
 <html>
 <head>
   <title>WodfPlayer is wild and free</title>
-  <script type="text/javascript" charset="utf-8" defer src="/latest/wolfplayer.js" onload="initPlayer();"></script>
+  <script type="text/javascript" charset="utf-8" defer src="/latest/wolfPlayer.js" onload="window._wolfplayer = true; initPlayer();"></script>
+  <script type="text/javascript" charset="utf-8" defer src="/latest/wolfPlugin.js" onload="window._wolfplugin = true; initPlayer();"></script>
 </head>
 <body>
   <div id="parentVideo"></div>
   <script type="text/javascript">
     function initPlayer() {
+      if (!window._wolfplayer || !window._wolfplugin) return
+
       window.player = new WolfPlayer({
         parent: '#parentVideo',
-        src: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'
+        src: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4',
+        plugins: [WolfPlugin.Logger],
+        logger: {logLevel: 0}
       })
     }
   </script>
