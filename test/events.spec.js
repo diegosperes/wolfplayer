@@ -16,95 +16,91 @@ let proxy = {
   }
 }
 
-describe('Events', () => {
+describe('Events', function() {
 
-  let events
-
-  beforeEach(() => {
-    events = new Events()
+  beforeEach(function() {
+    this.events = new Events()
   })
 
-  it('should register some events', () => {
-    events.register({SOME_EVENT1: 'some:event1', SOME_EVENT2: 'some:event2'})
-    expect(events).to.have.property('SOME_EVENT1', 'some:event1')
-    expect(events).to.have.property('SOME_EVENT2', 'some:event2')
+  it('should register some events', function() {
+    this.events.register({SOME_EVENT1: 'some:event1', SOME_EVENT2: 'some:event2'})
+    expect(Object.keys(this.events)).toContain('SOME_EVENT1')
+    expect(Object.keys(this.events)).toContain('SOME_EVENT2')
   })
 
-  it('should throw exception when event already exist', () => {
-    let _register = events.register.bind(events, {SOME_EVENT: 'some:event'})
+  it('should throw exception when event already exist', function() {
+    let _register = this.events.register.bind(this.events, {SOME_EVENT: 'some:event'})
     _register()
-    expect(_register).to.throw('SOME_EVENT event already exist')
+    expect(_register).toThrow('SOME_EVENT event already exist')
   })
 })
 
-describe('Events Manager', () => {
+describe('Events Manager', function() {
 
-  let manager
-
-  beforeEach(() => {
-    manager = new Manager()
+  beforeEach(function() {
+    this.manager = new Manager()
   })
 
-  it('add listener and call calback', (done) => {
-    let callback = sinon.spy()
-    manager.addListener('some-event', callback)
-    manager.trigger('some-event', [1, 2, 3]).then(() => {
-      callback.should.have.been.calledWithExactly(1, 2, 3)
+  it('add listener and call calback', function(done) {
+    let callback = jasmine.createSpy('spy')
+    this.manager.addListener('some-event', callback)
+    this.manager.trigger('some-event', [1, 2, 3]).then(() => {
+      expect(callback).toHaveBeenCalledWith(1, 2, 3)
       done()
     })
   })
 
-  it('does not call calback when event is undefined', (done) => {
-    let callback = sinon.spy()
-    manager.addListener('some-event', callback)
-    manager.trigger(undefined).then(() => {
-      callback.should.not.have.been.called
+  it('does not call calback when event is undefined', function(done) {
+    let callback = jasmine.createSpy('spy')
+    this.manager.addListener('some-event', callback)
+    this.manager.trigger(undefined).then(() => {
+      expect(callback).not.toHaveBeenCalled()
       done()
     })
   })
 
-  it('does not call calback when event does not exist', (done) => {
-    let callback = sinon.spy()
-    manager.trigger('some-event').then(() => {
-      callback.should.not.have.been.called
+  it('does not call calback when event does not exist', function(done) {
+    let callback = jasmine.createSpy('spy')
+    this.manager.trigger('some-event').then(() => {
+      expect(callback).not.toHaveBeenCalled()
       done()
     })
   })
 
-  it('wait listener promise to resolve promise event', (done) => {
+  it('wait listener promise to resolve promise event', function(done) {
     let time = 1500
-    let callback1 = sinon.spy()
-    let callback2 = sinon.spy()
+    let callback1 = jasmine.createSpy('spy')
+    let callback2 = jasmine.createSpy('spy')
 
-    manager.addListener('some-event', proxy.promiseOperation(callback1, time))
-    manager.addListener('some-event', proxy.promiseOperation(callback2, time))
-    manager.trigger('some-event').then(() => {
-      callback1.should.have.been.called
-      callback2.should.have.been.called
+    this.manager.addListener('some-event', proxy.promiseOperation(callback1, time))
+    this.manager.addListener('some-event', proxy.promiseOperation(callback2, time))
+    this.manager.trigger('some-event').then(() => {
+      expect(callback1).toHaveBeenCalled()
+      expect(callback2).toHaveBeenCalled()
       done()
     })
   })
 
-  it('should treat exception from callback', (done) => {
+  it('should treat exception from callback', function(done) {
     let callback1 = () => { throw 'some-error' }
-    let callback2 = sinon.spy()
+    let callback2 = jasmine.createSpy('spy')
 
-    manager.addListener('some-event', callback1)
-    manager.addListener('some-event', callback2)
-    manager.trigger('some-event').then(() => {
-      callback2.should.have.been.called
+    this.manager.addListener('some-event', callback1)
+    this.manager.addListener('some-event', callback2)
+    this.manager.trigger('some-event').then(() => {
+      expect(callback2).toHaveBeenCalled()
       done()
     })
   })
 
-  it('should treat reject from promise callback', (done) => {
+  it('should treat reject from promise callback', function(done) {
     let callback1 = () => { return new Promise((resolve, reject) => reject()) }
-    let callback2 = sinon.spy()
+    let callback2 = jasmine.createSpy('spy')
 
-    manager.addListener('some-event', callback1)
-    manager.addListener('some-event', callback2)
-    manager.trigger('some-event').then(() => {
-      callback2.should.have.been.called
+    this.manager.addListener('some-event', callback1)
+    this.manager.addListener('some-event', callback2)
+    this.manager.trigger('some-event').then(() => {
+      expect(callback2).toHaveBeenCalled()
       done()
     })
   })

@@ -12,7 +12,7 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'sinon-chai'],
+    frameworks: ['jasmine'],
 
 
     // list of files / patterns to load in the browser
@@ -35,6 +35,12 @@ module.exports = function(config) {
       'test/index.spec.js': ['webpack']
     },
 
+    plugins: [
+      'karma-jasmine',
+      'karma-webpack',
+      'karma-chrome-launcher',
+      'karma-firefox-launcher'
+    ],
 
     // test results reporter to use
     // possible values: 'dots', 'progress'

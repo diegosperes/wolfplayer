@@ -2,313 +2,306 @@ import utils from './utils'
 
 import WolfPlayer from '../src/player'
 
-describe('Playback', () => {
+describe('Playback', function() {
 
-  afterEach(() => {
+  afterEach(function() {
     for (let video of document.querySelectorAll('video')) { video.parentElement.removeChild(video) }
   })
 
-  describe('when player ready', () => {
+  describe('when player ready', function() {
 
-    let player
-    let videoElement
-    let callback
-
-    beforeEach((done) => {
-      player = new WolfPlayer(utils.baseOptions)
-      callback = sinon.spy()
-      player.addListener(player.events.HOOK_READY, () => { 
-        videoElement = document.querySelector('body video')
+    beforeEach(function(done) {
+      this.player = new WolfPlayer(utils.baseOptions)
+      this.callback = jasmine.createSpy('spy')
+      this.player.addListener(this.player.events.HOOK_READY, () => { 
+        this.videoElement = document.querySelector('body video')
         done()
       })
     })
 
-    it('insert video with correct source', () => {
-      let videoElement = document.querySelector('body video')
-      expect(videoElement.src).to.match(/http:\/\/localhost:[0-9]{4}\/base\/public\/sample\.mp4/)
+    it('insert video with correct source', function () {
+      expect(this.videoElement.src).toMatch(/http:\/\/localhost:[0-9]{4}\/base\/public\/sample\.mp4/)
     })
 
-    it('should trigger play event', (done) => {
-      player.addListener(player.events.PLAYBACK_PLAY, callback)
-      player.addListener(player.events.PLAYBACK_PLAY, () => {
-        callback.should.have.been.called
+    it('should trigger play event', function(done) {
+      this.player.addListener(this.player.events.PLAYBACK_PLAY, this.callback)
+      this.player.addListener(this.player.events.PLAYBACK_PLAY, () => {
+        expect(this.callback).toHaveBeenCalled()
         done()
       })
 
-      videoElement.play()
+      this.videoElement.play()
     })
 
-    it('should trigger pause event', (done) => {
-      player.addListener(player.events.PLAYBACK_PAUSE, callback)
-      player.addListener(player.events.PLAYBACK_PAUSE, () => {
-        callback.should.have.been.called
+    it('should trigger pause event', function(done) {
+      this.player.addListener(this.player.events.PLAYBACK_PAUSE, this.callback)
+      this.player.addListener(this.player.events.PLAYBACK_PAUSE, () => {
+        expect(this.callback).toHaveBeenCalled()
         done()
       })
 
-      videoElement.play().then(() => videoElement.pause())
+      this.videoElement.play().then(() => this.videoElement.pause())
     })
 
-    it('should trigger timeupdate event', (done) => {
-      player.addListener(player.events.PLAYBACK_TIMEUPDATE, callback)
-      player.addListener(player.events.PLAYBACK_TIMEUPDATE, () => {
-        callback.should.have.been.called
+    it('should trigger timeupdate event', function(done) {
+      this.player.addListener(this.player.events.PLAYBACK_TIMEUPDATE, this.callback)
+      this.player.addListener(this.player.events.PLAYBACK_TIMEUPDATE, () => {
+        expect(this.callback).toHaveBeenCalled()
         done()
       })
 
-      videoElement.play()
+      this.videoElement.play()
     })
 
-    it('should trigger progress event', (done) => {
-      player.addListener(player.events.PLAYBACK_PROGRESS, callback)
-      player.addListener(player.events.PLAYBACK_PROGRESS, () => {
-        callback.should.have.been.called
+    it('should trigger progress event', function(done) {
+      this.player.addListener(this.player.events.PLAYBACK_PROGRESS, this.callback)
+      this.player.addListener(this.player.events.PLAYBACK_PROGRESS, () => {
+        expect(this.callback).toHaveBeenCalled()
         done()
       })
 
-      videoElement.dispatchEvent(new Event('progress'))
+      this.videoElement.dispatchEvent(new Event('progress'))
     })
 
-    it('should trigger ratechange event', (done) => {
-      player.addListener(player.events.PLAYBACK_RATECHANGE, callback)
-      player.addListener(player.events.PLAYBACK_RATECHANGE, () => {
-        callback.should.have.been.called
+    it('should trigger ratechange event', function(done) {
+      this.player.addListener(this.player.events.PLAYBACK_RATECHANGE, this.callback)
+      this.player.addListener(this.player.events.PLAYBACK_RATECHANGE, () => {
+        expect(this.callback).toHaveBeenCalled()
         done()
       })
 
-      videoElement.play().then(() => videoElement.playbackRate = 2)
+      this.videoElement.play().then(() => this.videoElement.playbackRate = 2)
     })
 
-    it('should trigger volumechange event', (done) => {
-      player.addListener(player.events.PLAYBACK_VOLUMECHANGE, callback)
-      player.addListener(player.events.PLAYBACK_VOLUMECHANGE, () => {
-        callback.should.have.been.called
+    it('should trigger volumechange event', function(done) {
+      this.player.addListener(this.player.events.PLAYBACK_VOLUMECHANGE, this.callback)
+      this.player.addListener(this.player.events.PLAYBACK_VOLUMECHANGE, () => {
+        expect(this.callback).toHaveBeenCalled()
         done()
       })
 
-      videoElement.play().then(() => videoElement.volume = 0.8)
+      this.videoElement.play().then(() => this.videoElement.volume = 0.8)
     })
 
-    it('should trigger seek event', (done) => {
-      player.addListener(player.events.PLAYBACK_SEEKING, callback)
-      player.addListener(player.events.PLAYBACK_SEEKED, () => {
-        callback.should.have.been.called
+    it('should trigger seek event', function(done) {
+      this.player.addListener(this.player.events.PLAYBACK_SEEKING, this.callback)
+      this.player.addListener(this.player.events.PLAYBACK_SEEKED, () => {
+        expect(this.callback).toHaveBeenCalled()
         done()
       })
 
-      videoElement.play().then(() => videoElement.currentTime = 2)
+      this.videoElement.play().then(() => this.videoElement.currentTime = 2)
     })
 
-    describe('should trigger buffering event when', () => {
+    describe('should trigger buffering event when', function() {
 
-      it('loadstart is fired', (done) => {
-        player.addListener(player.events.PLAYBACK_BUFFERING, callback)
-        player.addListener(player.events.PLAYBACK_BUFFERING, () => {
-          callback.should.have.been.called
+      it('loadstart is fired', function(done) {
+        this.player.addListener(this.player.events.PLAYBACK_BUFFERING, this.callback)
+        this.player.addListener(this.player.events.PLAYBACK_BUFFERING, () => {
+          expect(this.callback).toHaveBeenCalled()
           done()
         })
 
-        videoElement.dispatchEvent(new Event('loadstart'))
+        this.videoElement.dispatchEvent(new Event('loadstart'))
       })
 
-      it('loadeddata is fired', (done) => {
-        player.addListener(player.events.PLAYBACK_BUFFERING, callback)
-        player.addListener(player.events.PLAYBACK_BUFFERING, () => {
-          callback.should.have.been.called
+      it('loadeddata is fired', function(done) {
+        this.player.addListener(this.player.events.PLAYBACK_BUFFERING, this.callback)
+        this.player.addListener(this.player.events.PLAYBACK_BUFFERING, () => {
+          expect(this.callback).toHaveBeenCalled()
           done()
         })
 
-        videoElement.dispatchEvent(new Event('loaddata'))
+        this.videoElement.dispatchEvent(new Event('loaddata'))
       })
     })
 
-    it('should trigger bufferload event', (done) => {
-      player.addListener(player.events.PLAYBACK_BUFFELOAD, callback)
-      player.addListener(player.events.PLAYBACK_BUFFELOAD, () => {
-        callback.should.have.been.called
+    it('should trigger bufferload event', function(done) {
+      this.player.addListener(this.player.events.PLAYBACK_BUFFELOAD, this.callback)
+      this.player.addListener(this.player.events.PLAYBACK_BUFFELOAD, () => {
+        expect(this.callback).toHaveBeenCalled()
         done()
       })
 
-      videoElement.dispatchEvent(new Event('canplay'))
+      this.videoElement.dispatchEvent(new Event('canplay'))
     })
 
-    it('should trigger bufferfull event', (done) => {
-      player.addListener(player.events.PLAYBACK_BUFFEFULL, callback)
-      player.addListener(player.events.PLAYBACK_BUFFEFULL, () => {
-        callback.should.have.been.called
+    it('should trigger bufferfull event', function(done) {
+      this.player.addListener(this.player.events.PLAYBACK_BUFFEFULL, this.callback)
+      this.player.addListener(this.player.events.PLAYBACK_BUFFEFULL, () => {
+        expect(this.callback).toHaveBeenCalled()
         done()
       })
 
-      videoElement.dispatchEvent(new Event('canplaythrough'))
+      this.videoElement.dispatchEvent(new Event('canplaythrough'))
     })
   })
 
-  describe('preload', () => {
+  describe('preload', function() {
 
-    describe('add attribute', () => {
+    describe('add attribute', function() {
 
-      it('by default', (done) => {
+      it('by default', function(done) {
         let player = new WolfPlayer(utils.baseOptions)
         player.addListener(player.events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
-          expect(videoElement.getAttribute('preload')).to.be.equal('metadata')
+          expect(videoElement.getAttribute('preload')).toEqual('metadata')
           done()
         })
       })
 
-      it('when preload has a value', (done) => {
+      it('when preload has a value', function(done) {
         let options = Object.assign({playback: {preload: 'none'}}, utils.baseOptions)
-
         let player = new WolfPlayer(options)
         player.addListener(player.events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
-          expect(videoElement.getAttribute('preload')).to.be.equal('none')
+          expect(videoElement.getAttribute('preload')).toEqual('none')
           done()
         })
       })
 
-      it('when preload is undefined', (done) => {
+      it('when preload is undefined', function(done) {
         let options = Object.assign({playback: {}}, utils.baseOptions)
-
         let player = new WolfPlayer(options)
         player.addListener(player.events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
-          expect(videoElement.getAttribute('preload')).to.be.equal('metadata')
+          expect(videoElement.getAttribute('preload')).toEqual('metadata')
           done()
         })
       })
     })
   })
 
-  describe('autoplay', () => {
+  describe('autoplay', function() {
 
-    it('add attribute when autoplay is true', (done) => {
+    it('add attribute when autoplay is true', function(done) {
       let options = Object.assign({playback: {autoplay: true}}, utils.baseOptions)
       let player = new WolfPlayer(options)
       player.addListener(player.events.HOOK_READY, () => {
         let videoElement = document.querySelector('body video')
-        expect(videoElement.hasAttribute('autoplay')).to.be.true
+        expect(videoElement.hasAttribute('autoplay')).toBeTruthy()
         done()
       })
     })
 
-    describe('does not add attribute', () => {
+    describe('does not add attribute', function() {
 
-      it('by default', (done) => {
+      it('by default', function(done) {
         let player = new WolfPlayer(utils.baseOptions)
         player.addListener(player.events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
-          expect(videoElement.hasAttribute('autoplay')).to.be.false
+          expect(videoElement.hasAttribute('autoplay')).toBeFalsy()
           done()
         })
       })
 
-      it('when autoplay is false', (done) => {
+      it('when autoplay is false', function(done) {
         let options = Object.assign({playback: {autoplay: false}}, utils.baseOptions)
         let player = new WolfPlayer(options)
         player.addListener(player.events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
-          expect(videoElement.hasAttribute('autoplay')).to.be.false
+          expect(videoElement.hasAttribute('autoplay')).toBeFalsy()
           done()
         })
       })
 
-      it('when autoplay is undefined', (done) => {
+      it('when autoplay is undefined', function(done) {
         let options = Object.assign({playback: {}}, utils.baseOptions)
         let player = new WolfPlayer(options)
         player.addListener(player.events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
-          expect(videoElement.hasAttribute('autoplay')).to.be.false
+          expect(videoElement.hasAttribute('autoplay')).toBeFalsy()
           done()
         })
       })
     })
   })
 
-  describe('loop', () => {
+  describe('loop', function() {
 
-    it('add attribute when loop is true', (done) => {
+    it('add attribute when loop is true', function(done) {
       let options = Object.assign({playback: {loop: true}}, utils.baseOptions)
       let player = new WolfPlayer(options)
       player.addListener(player.events.HOOK_READY, () => {
         let videoElement = document.querySelector('body video')
-        expect(videoElement.hasAttribute('loop')).to.be.true
+        expect(videoElement.hasAttribute('loop')).toBeTruthy()
         done()
       })
     })
 
-    describe('does not add attribute', () => {
+    describe('does not add attribute', function() {
 
-      it('by default', (done) => {
+      it('by default', function(done) {
         let player = new WolfPlayer(utils.baseOptions)
         player.addListener(player.events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
-          expect(videoElement.hasAttribute('loop')).to.be.false
+          expect(videoElement.hasAttribute('loop')).toBeFalsy()
           done()
         })
       })
 
-      it('when loop is false', (done) => {
+      it('when loop is false', function(done) {
         let options = Object.assign({playback: {loop: false}}, utils.baseOptions)
         let player = new WolfPlayer(options)
         player.addListener(player.events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
-          expect(videoElement.hasAttribute('loop')).to.be.false
+          expect(videoElement.hasAttribute('loop')).toBeFalsy()
           done()
         })
       })
 
-      it('when loop is undefined', (done) => {
+      it('when loop is undefined', function(done) {
         let options = Object.assign({playback: {}}, utils.baseOptions)
         let player = new WolfPlayer(options)
         player.addListener(player.events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
-          expect(videoElement.hasAttribute('loop')).to.be.false
+          expect(videoElement.hasAttribute('loop')).toBeFalsy()
           done()
         })
       })
     })
   })
 
-  describe('controls', () => {
+  describe('controls', function() {
 
-    describe('add attribute', () => {
+    describe('add attribute', function() {
 
-      it('by default', (done) => {
+      it('by default', function(done) {
         let player = new WolfPlayer(utils.baseOptions)
         player.addListener(player.events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
-          expect(videoElement.hasAttribute('controls')).to.be.true
+          expect(videoElement.hasAttribute('controls')).toBeTruthy()
           done()
         })
       })
 
-      it('when controls is true', (done) => {
+      it('when controls is true', function(done) {
         let options = Object.assign({playback: {controls: true}}, utils.baseOptions)
         let player = new WolfPlayer(options)
         player.addListener(player.events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
-          expect(videoElement.hasAttribute('controls')).to.be.true
+          expect(videoElement.hasAttribute('controls')).toBeTruthy()
           done()
         })
       })
 
-      it('when controls is undefined', (done) => {
+      it('when controls is undefined', function(done) {
         let options = Object.assign({playback: {}}, utils.baseOptions)
         let player = new WolfPlayer(options)
         player.addListener(player.events.HOOK_READY, () => {
           let videoElement = document.querySelector('body video')
-          expect(videoElement.hasAttribute('controls')).to.be.true
+          expect(videoElement.hasAttribute('controls')).toBeTruthy()
           done()
         })
       })
     })
 
-    it('does not add attribute when controls is false', (done) => {
+    it('does not add attribute when controls is false', function(done) {
       let options = Object.assign({playback: {controls: false}}, utils.baseOptions)
       let player = new WolfPlayer(options)
       player.addListener(player.events.HOOK_READY, () => {
         let videoElement = document.querySelector('body video')
-        expect(videoElement.hasAttribute('controls')).to.be.false
+        expect(videoElement.hasAttribute('controls')).toBeFalsy()
         done()
       })
     })
