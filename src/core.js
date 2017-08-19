@@ -33,7 +33,7 @@ export default class Core extends BaseObject {
   }
 
   onPlay() { return this.playback.play() }
-  onPause() { return this.playback.pause() }
+  onPause() { this.playback.pause() }
   onSeek(seconds) { this.playback.seek(seconds) }
   onRatechange(rate) { this.playback.changeRate(rate) }
   onVolumechange(volume) { this.playback.changeVolume(volume) }

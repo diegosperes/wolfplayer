@@ -12,17 +12,17 @@ describe('Core', function() {
     beforeEach(function(done) {
       this.player = new WolfPlayer(utils.baseOptions)
       this.callback = jasmine.createSpy('spy')
-      this.player.addListener(this.player.events.HOOK_READY, () => done())
+      this.player.addListener(this.player.events.HOOK_READY, done)
     })
 
     it('should trigger play event', function(done) {
-      this.player.addListener(this.player.events.PLAYBACK_PLAY, this.callback)
-      this.player.addListener(this.player.events.PLAYBACK_PLAY, () => {
+      let assert = () => {
         expect(this.callback).toHaveBeenCalled()
         done()
-      })
+      }
 
-      this.player.trigger(this.player.events.API_PLAY)
+      this.player.addListener(this.player.events.PLAYBACK_PLAY, this.callback)
+      this.player.trigger(this.player.events.API_PLAY).then(assert)
     })
 
     it('should trigger pause event', function(done) {

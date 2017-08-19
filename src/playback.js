@@ -68,8 +68,12 @@ export default class HTML5Playback extends BaseObject {
     if ((!options || !('preload' in options)) || options.preload) this.mediaElement.setAttribute('preload', (options && options.preload) || 'metadata')
   }
 
-  play() { return this.mediaElement.play() }
-  pause() { return this.mediaElement.pause() }
+  play() {
+    // Firefox has a issue, when tag video 'play' method is called the return is Promise like object (PromiseProto)
+    return new Promise(resolve => this.mediaElement.play().then(resolve))
+  }
+
+  pause() { this.mediaElement.pause() }
   seek(seconds) { this.mediaElement.currentTime = seconds }
   changeRate(rate) { this.mediaElement.playbackRate = rate }
   changeVolume(volume) { this.mediaElement.volume = volume }
