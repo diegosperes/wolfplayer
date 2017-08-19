@@ -1,6 +1,5 @@
 import utils from './utils'
 
-import { Logger } from '../src/plugins/index.js'
 import WolfPlayer from '../src/player'
 
 describe('Logger', function() {
