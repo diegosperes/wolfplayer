@@ -1,7 +1,7 @@
 class Events {
   register(events) {
     for(let event in events) {
-      if (event in this) throw `${event} event already exist`
+      if (event in this) continue
       this[event] = events[event]
     }
   }

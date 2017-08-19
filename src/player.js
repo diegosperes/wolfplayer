@@ -15,9 +15,14 @@ export default class Player extends BaseObject {
     super()
     this.plugins = {constructors: options.plugins || [], instances: []}
     this.core = new Core(options, this.manager)
+    this.registerPluginEvents()
     this.startPlayer(options)
 
     return this.manager
+  }
+
+  registerPluginEvents() {
+    for (let plugin of this.plugins.constructors) { this.events.register(plugin.eventsToRegister) }
   }
 
   startPlayer(options) {
@@ -26,6 +31,7 @@ export default class Player extends BaseObject {
         let pluginOptions = this.getPluginOptions(options, plugin)
         this.plugins.instances.push(new plugin(this.manager, pluginOptions))
       }
+
       this.manager.trigger(this.events.HOOK_READY)
     })
   }

@@ -28,10 +28,10 @@ describe('Events', function() {
     expect(Object.keys(this.events)).toContain('SOME_EVENT2')
   })
 
-  it('should throw exception when event already exist', function() {
-    let _register = this.events.register.bind(this.events, {SOME_EVENT: 'some:event'})
-    _register()
-    expect(_register).toThrow('SOME_EVENT event already exist')
+  it('should not override event when exist', function() {
+    this.events.register({SOME_EVENT: 'some:event'})
+    this.events.register({SOME_EVENT: 'some:event1'})
+    expect(this.events.SOME_EVENT).toEqual('some:event')
   })
 })
 
