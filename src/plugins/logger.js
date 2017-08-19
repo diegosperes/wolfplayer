@@ -16,8 +16,10 @@ export default class Logger extends Plugin {
   }
 
   get logLevel() {
-    if (this.options.logLevel === undefined) return LOGGER_INFO
-    return this.options.logLevel
+    if (this.options.logLevel === undefined) this._logLevel = LOGGER_INFO
+    else if (this._logLevel === undefined) this._logLevel = this.options.logLevel
+
+    return this._logLevel
   }
 
   bind() {
