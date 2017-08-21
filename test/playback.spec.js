@@ -93,6 +93,37 @@ describe('Playback', function() {
       this.videoElement.play().then(() => this.videoElement.currentTime = 2)
     })
 
+    it('should trigger ended event', function(done) {
+      this.player.addListener(this.player.events.PLAYBACK_ENDED, this.callback)
+      this.player.addListener(this.player.events.PLAYBACK_ENDED, () => {
+        expect(this.callback).toHaveBeenCalled()
+        done()
+      })
+
+      this.videoElement.currentTime = 5
+      this.videoElement.play()
+    })
+
+    it('should trigger error event', function(done) {
+      this.player.addListener(this.player.events.PLAYBACK_ERROR, this.callback)
+      this.player.addListener(this.player.events.PLAYBACK_ERROR, () => {
+        expect(this.callback).toHaveBeenCalled()
+        done()
+      })
+
+      this.videoElement.play().then(() => { this.videoElement.dispatchEvent(new Event('error')) })
+    })
+
+    it('should trigger PLAYER_ERROR when PLAYBACK_ERROR is triggered', function(done) {
+      this.player.addListener(this.player.events.PLAYER_ERROR, this.callback)
+      this.player.addListener(this.player.events.PLAYER_ERROR, () => {
+        expect(this.callback).toHaveBeenCalled()
+        done()
+      })
+
+      this.videoElement.play().then(() => { this.videoElement.dispatchEvent(new Event('error')) })
+    })
+
     describe('should trigger buffering event when', function() {
 
       it('loadstart is fired', function(done) {

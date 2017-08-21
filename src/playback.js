@@ -8,6 +8,8 @@ export default class HTML5Playback extends BaseObject {
       PLAYBACK_PAUSE: 'playback:pause',
       PLAYBACK_SEEKING: 'playback:seeking',
       PLAYBACK_SEEKED: 'playback:seeked',
+      PLAYBACK_ENDED: 'playback:ended',
+      PLAYBACK_ERROR: 'playback:error',
       PLAYBACK_TIMEUPDATE: 'playback:timeupdate',
       PLAYBACK_PROGRESS: 'playback:progress',
       PLAYBACK_RATECHANGE: 'playback:ratechange',
@@ -24,6 +26,8 @@ export default class HTML5Playback extends BaseObject {
       pause: this.events.PLAYBACK_PAUSE,
       seeking: this.events.PLAYBACK_SEEKING,
       seeked: this.events.PLAYBACK_SEEKED,
+      ended: this.events.PLAYBACK_ENDED,
+      error: this.events.PLAYBACK_ERROR,
       timeupdate: this.events.PLAYBACK_TIMEUPDATE,
       progress: this.events.PLAYBACK_PROGRESS,
       ratechange: this.events.PLAYBACK_RATECHANGE,
@@ -49,6 +53,8 @@ export default class HTML5Playback extends BaseObject {
     this.mediaElement.addEventListener('pause', (event) => this._proxyEvent(event))
     this.mediaElement.addEventListener('seeking', (event) => this._proxyEvent(event))
     this.mediaElement.addEventListener('seeked', (event) => this._proxyEvent(event))
+    this.mediaElement.addEventListener('ended', (event) => this._proxyEvent(event))
+    this.mediaElement.addEventListener('error', (event) => this.onError(event))
     this.mediaElement.addEventListener('timeupdate', (event) => this._proxyEvent(event))
     this.mediaElement.addEventListener('progress', (event) => this._proxyEvent(event))
     this.mediaElement.addEventListener('ratechange', (event) => this._proxyEvent(event))
@@ -73,11 +79,15 @@ export default class HTML5Playback extends BaseObject {
     return new Promise(resolve => this.mediaElement.play().then(resolve))
   }
 
+  onError(event) {
+    this._proxyEvent(event)
+    this.manager.trigger(this.events.PLAYER_ERROR, event)
+  }
+
   pause() { this.mediaElement.pause() }
   seek(seconds) { this.mediaElement.currentTime = seconds }
   changeRate(rate) { this.mediaElement.playbackRate = rate }
   changeVolume(volume) { this.mediaElement.volume = volume }
   attachTo(container) { container.appendChild(this.mediaElement) }
-
   _proxyEvent(event) { this.manager.trigger(this.eventsByType[event.type], [event]) }
 }
