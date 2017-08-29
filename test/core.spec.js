@@ -22,7 +22,8 @@ describe('Core', function() {
       }
 
       this.player.addListener(this.player.events.PLAYBACK_PLAY, this.callback)
-      this.player.trigger(this.player.events.API_PLAY).then(assert)
+      this.player.waitEvent(this.player.events.PLAYBACK_PLAY, assert)
+      this.player.trigger(this.player.events.API_PLAY)
     })
 
     it('should trigger pause event', function(done) {
