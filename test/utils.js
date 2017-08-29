@@ -20,7 +20,7 @@ const createPlayer = (options=baseOptions) => {
   }
 
   player.trigger = function(event, args) {
-    originalTrigger.apply(player, [event, args]).then(() => {
+    return originalTrigger.apply(player, [event, args]).then(() => {
       if (player._waitingEvent === event) player._waitingCallback()
     })
   }

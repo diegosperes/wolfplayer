@@ -15,7 +15,7 @@ describe('Player', function() {
   beforeEach(function() {
     this.options = Object.assign({fakeplugin: {constructorSpy: jasmine.createSpy('spy')}}, utils.baseOptions)
     this.options.plugins.push(FakePlugin)
-    this.player = new WolfPlayer(this.options)
+    this.player = utils.createPlayer(this.options)
   })
 
   it('should register all plugin events before HOOK_START', function() {
@@ -23,7 +23,7 @@ describe('Player', function() {
   })
 
   it('should use the same manager of player and use correct options', function(done) {
-    this.player.addListener(this.player.events.HOOK_READY, () => {
+    this.player.waitEvent(this.player.events.HOOK_READY, () => {
       expect(this.options.fakeplugin.constructorSpy).toHaveBeenCalledWith(this.player, this.options.fakeplugin)
       done()
     })
@@ -33,7 +33,7 @@ describe('Player', function() {
     let callbackReady = jasmine.createSpy('spy')
     this.player.addListener(this.player.events.HOOK_READY, callbackReady)
 
-    this.player.addListener(this.player.events.HOOK_READY, () => {
+    this.player.waitEvent(this.player.events.HOOK_READY, () => {
       expect(this.options.fakeplugin.constructorSpy).toHaveBeenCalledBefore(callbackReady)
       done()
     })

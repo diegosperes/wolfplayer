@@ -10,9 +10,9 @@ describe('Core', function() {
   describe('when player ready', function() {
 
     beforeEach(function(done) {
-      this.player = new WolfPlayer(utils.baseOptions)
+      this.player = utils.createPlayer()
       this.callback = jasmine.createSpy('spy')
-      this.player.addListener(this.player.events.HOOK_READY, done)
+      this.player.waitEvent(this.player.events.HOOK_READY, done)
     })
 
     it('should trigger play event', function(done) {
@@ -27,7 +27,7 @@ describe('Core', function() {
 
     it('should trigger pause event', function(done) {
       this.player.addListener(this.player.events.PLAYBACK_PAUSE, this.callback)
-      this.player.addListener(this.player.events.PLAYBACK_PAUSE, () => {
+      this.player.waitEvent(this.player.events.PLAYBACK_PAUSE, () => {
         expect(this.callback).toHaveBeenCalled()
         done()
       })
@@ -37,7 +37,7 @@ describe('Core', function() {
 
     it('should trigger ratechange event', function(done) {
       this.player.addListener(this.player.events.PLAYBACK_RATECHANGE, this.callback)
-      this.player.addListener(this.player.events.PLAYBACK_RATECHANGE, () => {
+      this.player.waitEvent(this.player.events.PLAYBACK_RATECHANGE, () => {
         expect(this.callback).toHaveBeenCalled()
         done()
       })
@@ -47,7 +47,7 @@ describe('Core', function() {
 
     it('should trigger volumechange event', function(done) {
       this.player.addListener(this.player.events.PLAYBACK_VOLUMECHANGE, this.callback)
-      this.player.addListener(this.player.events.PLAYBACK_VOLUMECHANGE, () => {
+      this.player.waitEvent(this.player.events.PLAYBACK_VOLUMECHANGE, () => {
         expect(this.callback).toHaveBeenCalled()
         done()
       })
@@ -57,7 +57,7 @@ describe('Core', function() {
 
     it('should trigger seek event', function(done) {
       this.player.addListener(this.player.events.PLAYBACK_SEEKING, this.callback)
-      this.player.addListener(this.player.events.PLAYBACK_SEEKED, () => {
+      this.player.waitEvent(this.player.events.PLAYBACK_SEEKED, () => {
         expect(this.callback).toHaveBeenCalled()
         done()
       })
@@ -68,9 +68,9 @@ describe('Core', function() {
 
   describe('insert video element in DOM when parent', function() {
     it('is a string', function(done) {
-      let player = new WolfPlayer({ parent: 'body', src: 'base/public/sample.mp4' })
+      let player = utils.createPlayer({ parent: 'body', src: 'base/public/sample.mp4' })
 
-      player.addListener(player.events.HOOK_READY, () => {
+      player.waitEvent(player.events.HOOK_READY, () => {
         let videoElement = document.querySelector('body video')
         expect(videoElement.tagName).toEqual('VIDEO')
         done()
@@ -78,9 +78,9 @@ describe('Core', function() {
     })
 
     it('is a DOM element', function(done) {
-      let player =  new WolfPlayer({ parent: document.body, src: 'base/public/sample.mp4' })
+      let player =  utils.createPlayer({ parent: document.body, src: 'base/public/sample.mp4' })
       
-      player.addListener(player.events.HOOK_READY, () => {
+      player.waitEvent(player.events.HOOK_READY, () => {
         let videoElement = document.querySelector('body video')
         expect(videoElement.tagName).toEqual('VIDEO')
         done()
