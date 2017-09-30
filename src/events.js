@@ -32,7 +32,7 @@ class Manager {
       let counter = 0
       let expectedCounter = this._eventsMap[event].length
       let _resolve = () => { counter += 1; if (counter === expectedCounter) resolve() }
-      let _reject = (error) => { debugger; this.trigger(this.events.PLAYER_ERROR, [error]); _resolve() }
+      let _reject = (error) => { this.trigger(this.events.PLAYER_ERROR, [error]); _resolve() }
 
       for(let listerner of this._eventsMap[event]) {
         new helpers.Promise((innerResolve, innerReject) => {

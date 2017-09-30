@@ -28,7 +28,6 @@ export default class HTML5Playback extends BaseObject {
       seeking: this.events.PLAYBACK_SEEKING,
       seeked: this.events.PLAYBACK_SEEKED,
       ended: this.events.PLAYBACK_ENDED,
-      error: this.events.PLAYBACK_ERROR,
       timeupdate: this.events.PLAYBACK_TIMEUPDATE,
       progress: this.events.PLAYBACK_PROGRESS,
       ratechange: this.events.PLAYBACK_RATECHANGE,
@@ -81,8 +80,9 @@ export default class HTML5Playback extends BaseObject {
   }
 
   onError(event) {
-    this._proxyEvent(event)
-    this.manager.trigger(this.events.PLAYER_ERROR, event)
+    const error = this.mediaElement.error
+    this.manager.trigger(this.events.PLAYBACK_ERROR, error)
+    this.manager.trigger(this.events.PLAYER_ERROR, error)
   }
 
   pause() { this.mediaElement.pause() }
