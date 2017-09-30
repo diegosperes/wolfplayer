@@ -1,3 +1,4 @@
+import helpers from './helpers'
 import { BaseObject } from './base.js'
 
 export default class HTML5Playback extends BaseObject {
@@ -76,7 +77,7 @@ export default class HTML5Playback extends BaseObject {
 
   play() {
     // Firefox has a issue, when tag video 'play' method is called the return is Promise like object (PromiseProto)
-    return new Promise(resolve => this.mediaElement.play().then(resolve))
+    return new helpers.Promise(resolve => this.mediaElement.play().then(resolve))
   }
 
   onError(event) {

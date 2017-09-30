@@ -1,3 +1,5 @@
+import helpers from './helpers'
+
 class Events {
   register(events) {
     for(let event in events) {
@@ -24,18 +26,18 @@ class Manager {
   }
 
   trigger(event, args) {
-    if (!event || !(event in this._eventsMap)) return Promise.resolve()
+    if (!event || !(event in this._eventsMap)) return helpers.Promise.resolve()
 
-    return new Promise(resolve => {
+    return new helpers.Promise(resolve => {
       let counter = 0
       let expectedCounter = this._eventsMap[event].length
       let _resolve = () => { counter += 1; if (counter === expectedCounter) resolve() }
-      let _reject = (error) => { this.trigger(this.events.PLAYER_ERROR, [error]); _resolve() }
+      let _reject = (error) => { debugger; this.trigger(this.events.PLAYER_ERROR, [error]); _resolve() }
 
       for(let listerner of this._eventsMap[event]) {
-        new Promise((innerResolve, innerReject) => {
+        new helpers.Promise((innerResolve, innerReject) => {
           let result = listerner.callback.apply(listerner.context, args)
-          if (result instanceof Promise) result.then(innerResolve, innerReject)
+          if (result instanceof helpers.Promise) result.then(innerResolve, innerReject)
           else innerResolve()
         }).then(_resolve, _reject)
       }
