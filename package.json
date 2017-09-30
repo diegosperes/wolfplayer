@@ -23,6 +23,7 @@
   },
   "scripts": {
     "server": "webpack-dev-server --host 0.0.0.0 --content-base public/ --output-public-path latest/",
-    "test": "./node_modules/karma/bin/karma start --single-run"
+    "test": "./node_modules/karma/bin/karma start --single-run",
+    "watch": "./node_modules/karma/bin/karma start"
   }
 }
